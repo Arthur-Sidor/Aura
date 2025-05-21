@@ -2,9 +2,13 @@ package br.com.fiap.aura.Screens
 
 import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -13,7 +17,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.launch
+import br.com.fiap.aura.Menu.SideMenu
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AvaliacaoRiscosPsicossociaisScreen(
     onNavigateToBemEstar: () -> Unit,
@@ -21,6 +28,9 @@ fun AvaliacaoRiscosPsicossociaisScreen(
     onNavigateToLembretes: () -> Unit,
     onNavigateToRecursosApoio: () -> Unit
 ) {
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    val coroutineScope = rememberCoroutineScope()
+
     var sentimento by remember { mutableStateOf("") }
     var carga by remember { mutableStateOf("") }
     var relacaoLideranca by remember { mutableStateOf("") }
@@ -29,79 +39,157 @@ fun AvaliacaoRiscosPsicossociaisScreen(
     val opcoesCarga = listOf("Leve", "Adequada", "Excessiva")
     val opcoesRelacao = listOf("Boa", "Neutra", "Ruim")
 
-    Column(
-        modifier = Modifier
-            .background(Color.Black)
-            .fillMaxSize()
-            .padding(24.dp)
-            .verticalScroll(rememberScrollState()),
-        verticalArrangement = Arrangement.spacedBy(20.dp)
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        drawerContent = {
+            SideMenu(
+                onNavigateToBemEstar = {
+                    coroutineScope.launch { drawerState.close() }
+                    onNavigateToBemEstar()
+                },
+                onNavigateToVisualizacaoDados = {
+                    coroutineScope.launch { drawerState.close() }
+                    onNavigateToVisualizacaoDados()
+                },
+                onNavigateToLembretes = {
+                    coroutineScope.launch { drawerState.close() }
+                    onNavigateToLembretes()
+                },
+                onNavigateToRecursosApoio = {
+                    coroutineScope.launch { drawerState.close() }
+                    onNavigateToRecursosApoio()
+                },
+                onNavigateToAvaliacaoRiscos = {
+                    coroutineScope.launch { drawerState.close() }
+                }
+            )
+        }
     ) {
-        Text(
-            "Avaliação de Riscos Psicossociais",
-            fontSize = 22.sp,
-            fontWeight = FontWeight.Bold
-        )
-
-        OutlinedTextField(
-            value = sentimento,
-            onValueChange = { sentimento = it },
-            label = { Text("Como você está se sentindo hoje?") },
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Text("Como você avalia sua carga de trabalho?")
-        opcoesCarga.forEach {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                RadioButton(selected = carga == it, onClick = { carga = it })
-                Text(it)
-            }
-        }
-
-        Text("Como está sua relação com a liderança?")
-        opcoesRelacao.forEach {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                RadioButton(selected = relacaoLideranca == it, onClick = { relacaoLideranca = it })
-                Text(it)
-            }
-        }
-
-        OutlinedTextField(
-            value = sinaisAlerta,
-            onValueChange = { sinaisAlerta = it },
-            label = { Text("Você percebe algum sinal de alerta emocional?") },
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Button(
-            onClick = {
-                Log.d(
-                    "AVALIACAO",
-                    "Sentimento: $sentimento, Carga: $carga, Liderança: $relacaoLideranca, Alertas: $sinaisAlerta"
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = {
+                        Text("Avaliação", color = Color.White)
+                    },
+                    navigationIcon = {
+                        IconButton(onClick = {
+                            coroutineScope.launch { drawerState.open() }
+                        }) {
+                            Icon(Icons.Default.Menu, contentDescription = "Menu", tint = Color.White)
+                        }
+                    },
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = Color(0xFF222222)
+                    )
                 )
             },
-            modifier = Modifier.align(Alignment.End)
-        ) {
-            Text("Enviar")
-        }
+            containerColor = Color.Black
+        ) { innerPadding ->
+            Column(
+                modifier = Modifier
+                    .padding(innerPadding)
+                    .fillMaxSize()
+                    .padding(24.dp)
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(24.dp)
+            ) {
+                Text(
+                    "Avaliação de Riscos Psicossociais",
+                    fontSize = 26.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFF4CAF50),
+                    modifier = Modifier.padding(bottom = 12.dp)
+                )
 
-        Spacer(modifier = Modifier.height(40.dp))
+                OutlinedTextField(
+                    value = sentimento,
+                    onValueChange = { sentimento = it },
+                    label = { Text("Como você está se sentindo hoje?", color = Color.LightGray) },
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(12.dp),
+                )
 
-        // Botões para navegar entre telas
-        Button(onClick = onNavigateToBemEstar, modifier = Modifier.fillMaxWidth()) {
-            Text("Ir para Bem-Estar")
-        }
-        Spacer(modifier = Modifier.height(12.dp))
-        Button(onClick = onNavigateToVisualizacaoDados, modifier = Modifier.fillMaxWidth()) {
-            Text("Ir para Visualização de Dados")
-        }
-        Spacer(modifier = Modifier.height(12.dp))
-        Button(onClick = onNavigateToLembretes, modifier = Modifier.fillMaxWidth()) {
-            Text("Ir para Lembretes")
-        }
-        Spacer(modifier = Modifier.height(12.dp))
-        Button(onClick = onNavigateToRecursosApoio, modifier = Modifier.fillMaxWidth()) {
-            Text("Ir para Recursos de Apoio")
+                SectionTitle("Como você avalia sua carga de trabalho?")
+                opcoesCarga.forEach { opcao ->
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 4.dp)
+                            .clickable { carga = opcao }
+                    ) {
+                        RadioButton(
+                            selected = carga == opcao,
+                            onClick = { carga = opcao },
+                            colors = RadioButtonDefaults.colors(selectedColor = Color(0xFF4CAF50))
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(opcao, color = Color.White, fontSize = 16.sp)
+                    }
+                }
+
+                Divider(color = Color.DarkGray, thickness = 1.dp, modifier = Modifier.padding(vertical = 12.dp))
+
+                SectionTitle("Como está sua relação com a liderança?")
+                opcoesRelacao.forEach { opcao ->
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 4.dp)
+                            .clickable { relacaoLideranca = opcao }
+                    ) {
+                        RadioButton(
+                            selected = relacaoLideranca == opcao,
+                            onClick = { relacaoLideranca = opcao },
+                            colors = RadioButtonDefaults.colors(selectedColor = Color(0xFF4CAF50))
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(opcao, color = Color.White, fontSize = 16.sp)
+                    }
+                }
+
+                Divider(color = Color.DarkGray, thickness = 1.dp, modifier = Modifier.padding(vertical = 12.dp))
+
+                OutlinedTextField(
+                    value = sinaisAlerta,
+                    onValueChange = { sinaisAlerta = it },
+                    label = { Text("Você percebe algum sinal de alerta emocional?", color = Color.LightGray) },
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(12.dp),
+                    maxLines = 4,
+                    singleLine = false,
+                )
+
+                Button(
+                    onClick = {
+                        Log.d(
+                            "AVALIACAO",
+                            "Sentimento: $sentimento, Carga: $carga, Liderança: $relacaoLideranca, Alertas: $sinaisAlerta"
+                        )
+                    },
+                    modifier = Modifier
+                        .align(Alignment.End)
+                        .padding(top = 16.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50)),
+                    shape = RoundedCornerShape(16.dp)
+                ) {
+                    Text("Enviar", color = Color.Black, fontWeight = FontWeight.Bold)
+                }
+
+                Spacer(modifier = Modifier.height(40.dp))
+            }
         }
     }
+}
+
+@Composable
+fun SectionTitle(text: String) {
+    Text(
+        text,
+        fontSize = 18.sp,
+        fontWeight = FontWeight.SemiBold,
+        color = Color(0xFF4CAF50),
+        modifier = Modifier.padding(bottom = 8.dp)
+    )
 }

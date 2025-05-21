@@ -1,18 +1,31 @@
 package br.com.fiap.aura.Screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.launch
+import br.com.fiap.aura.Menu.SideMenu
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BemEstarScreen(
     onNavigateToVisualizacaoDados: () -> Unit,
@@ -20,114 +33,182 @@ fun BemEstarScreen(
     onNavigateToRecursosApoio: () -> Unit,
     onNavigateToAvaliacaoRiscos: () -> Unit
 ) {
-    var humorSelecionado by remember { mutableStateOf<String?>(null) }
-    var descricao by remember { mutableStateOf("") }
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    val coroutineScope = rememberCoroutineScope()
 
-    val opcoesHumor = listOf("😀 Feliz", "😐 Neutro", "😔 Triste", "😠 Irritado", "😟 Ansioso")
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Black)
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.CenterHorizontally
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        drawerContent = {
+            SideMenu(
+                onNavigateToBemEstar = {
+                    coroutineScope.launch { drawerState.close() }
+                },
+                onNavigateToVisualizacaoDados = {
+                    coroutineScope.launch { drawerState.close() }
+                    onNavigateToVisualizacaoDados()
+                },
+                onNavigateToLembretes = {
+                    coroutineScope.launch { drawerState.close() }
+                    onNavigateToLembretes()
+                },
+                onNavigateToRecursosApoio = {
+                    coroutineScope.launch { drawerState.close() }
+                    onNavigateToRecursosApoio()
+                },
+                onNavigateToAvaliacaoRiscos = {
+                    coroutineScope.launch { drawerState.close() }
+                    onNavigateToAvaliacaoRiscos()
+                }
+            )
+        }
     ) {
-        Text(
-            text = "Acompanhamento do Bem-Estar Emocional",
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color.White,
-            modifier = Modifier.padding(bottom = 24.dp)
-        )
-
-        Text(
-            text = "Como você está se sentindo hoje?",
-            color = Color.White,
-            fontSize = 16.sp,
-            modifier = Modifier.padding(bottom = 12.dp)
-        )
-
-        // Botões de humor
-        opcoesHumor.forEach { humor ->
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 4.dp)
-                    .background(
-                        if (humorSelecionado == humor) Color(0xFF4CAF50) else Color.DarkGray,
-                        shape = RoundedCornerShape(8.dp)
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = {
+                        Text("Bem-Estar", color = Color.White)
+                    },
+                    navigationIcon = {
+                        IconButton(onClick = {
+                            coroutineScope.launch { drawerState.open() }
+                        }) {
+                            Icon(Icons.Default.Menu, contentDescription = "Menu", tint = Color.White)
+                        }
+                    },
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = Color(0xFF222222)
                     )
-                    .clickable { humorSelecionado = humor }
-                    .padding(12.dp)
+                )
+            },
+            containerColor = Color.Black
+        ) { innerPadding ->
+
+            var humorSelecionado by remember { mutableStateOf<String?>(null) }
+            var descricao by remember { mutableStateOf("") }
+            var isFocused by remember { mutableStateOf(false) }
+
+            val opcoesHumor = listOf("😀 Feliz", "😐 Neutro", "😔 Triste", "😠 Irritado", "😟 Ansioso")
+
+            Column(
+                modifier = Modifier
+                    .padding(innerPadding)
+                    .fillMaxSize()
+                    .padding(16.dp)
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = humor,
+                    text = "Acompanhamento do Bem-Estar Emocional",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
                     color = Color.White,
-                    fontSize = 16.sp
+                    modifier = Modifier.padding(bottom = 24.dp)
                 )
+
+                Text(
+                    text = "Como você está se sentindo hoje?",
+                    color = Color.White,
+                    fontSize = 16.sp,
+                    modifier = Modifier.padding(bottom = 12.dp)
+                )
+
+                opcoesHumor.forEach { humor ->
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 4.dp)
+                            .background(
+                                if (humorSelecionado == humor) Color(0xFF4CAF50) else Color.DarkGray,
+                                shape = RoundedCornerShape(8.dp)
+                            )
+                            .clickable { humorSelecionado = humor }
+                            .padding(12.dp)
+                    ) {
+                        Text(
+                            text = humor,
+                            color = Color.White,
+                            fontSize = 16.sp
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(24.dp))
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(140.dp)
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(Color.DarkGray)
+                        .border(
+                            width = 2.dp,
+                            color = if (isFocused) Color(0xFF4CAF50) else Color.Gray,
+                            shape = RoundedCornerShape(8.dp)
+                        )
+                        .padding(12.dp)
+                ) {
+                    BasicTextField(
+                        value = descricao,
+                        onValueChange = { descricao = it },
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .onFocusChanged { focusState -> isFocused = focusState.isFocused },
+                        textStyle = TextStyle(
+                            color = Color.White,
+                            fontSize = 16.sp
+                        ),
+                        cursorBrush = SolidColor(Color(0xFF4CAF50))
+                    )
+                    if (descricao.isEmpty() && !isFocused) {
+                        Text(
+                            text = "Descreva seu dia ou sentimentos",
+                            color = Color.Gray,
+                            fontSize = 16.sp
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(24.dp))
+
+                Button(
+                    onClick = {
+                        // ação salvar
+                    },
+                    enabled = humorSelecionado != null && descricao.isNotBlank(),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50)),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Salvar Check-in", color = Color.White)
+                }
+
+                Spacer(modifier = Modifier.height(40.dp))
+
+                Button(
+                    onClick = onNavigateToVisualizacaoDados,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Visualização de Dados Consolidados")
+                }
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                Button(
+                    onClick = onNavigateToLembretes,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Lembretes, Dicas e Apoio")
+                }
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                Button(
+                    onClick = onNavigateToRecursosApoio,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Recursos de Apoio")
+                }
             }
-        }
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        OutlinedTextField(
-            value = descricao,
-            onValueChange = { descricao = it },
-            label = { Text("Descreva seu dia ou sentimentos") },
-            placeholder = { Text("Ex: Me senti sobrecarregado no trabalho...") },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(140.dp),
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = Color(0xFF4CAF50),
-                unfocusedBorderColor = Color.Gray,
-                cursorColor = Color.White,
-                focusedTextColor = Color.White,
-                focusedContainerColor = Color.DarkGray,
-                unfocusedContainerColor = Color.DarkGray
-            )
-        )
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        Button(
-            onClick = {
-                // Aqui você pode salvar no banco ou exibir uma mensagem
-            },
-            enabled = humorSelecionado != null && descricao.isNotBlank(),
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50)),
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("Salvar Check-in", color = Color.White)
-        }
-
-        Spacer(modifier = Modifier.height(40.dp))
-
-        // Botões para navegar para outras telas
-        Button(
-            onClick = onNavigateToVisualizacaoDados,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("Visualização de Dados Consolidados")
-        }
-
-        Spacer(modifier = Modifier.height(12.dp))
-
-        Button(
-            onClick = onNavigateToLembretes,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("Lembretes, Dicas e Apoio")
-        }
-
-        Spacer(modifier = Modifier.height(12.dp))
-
-        Button(
-            onClick = onNavigateToRecursosApoio,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("Recursos de Apoio")
         }
     }
 }
