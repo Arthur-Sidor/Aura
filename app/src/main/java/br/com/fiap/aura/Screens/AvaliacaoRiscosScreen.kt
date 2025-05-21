@@ -8,7 +8,12 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.SentimentSatisfied
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -68,20 +73,42 @@ fun AvaliacaoRiscosPsicossociaisScreen(
         Scaffold(
             topBar = {
                 TopAppBar(
-                    title = {
-                        Text("Avaliação", color = Color.White)
-                    },
+                    title = { Text("Riscos", color = Color.White) },
                     navigationIcon = {
-                        IconButton(onClick = {
-                            coroutineScope.launch { drawerState.open() }
-                        }) {
-                            Icon(Icons.Default.Menu, contentDescription = "Menu", tint = Color.White)
+                        @androidx.compose.runtime.Composable {
+                            Icon(Icons.Default.ArrowBack, contentDescription = "Voltar", tint = Color.White)
                         }
                     },
-                    colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = Color(0xFF222222)
-                    )
+                    colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Black)
                 )
+            },
+            bottomBar = {
+                NavigationBar(containerColor = Color.Black) {
+                    NavigationBarItem(
+                        icon = { Icon(Icons.Default.SentimentSatisfied, contentDescription = "Bem-Estar") },
+                        label = { Text("RecursosApoio", color = Color.White) },
+                        selected = false,
+                        onClick = onNavigateToRecursosApoio
+                    )
+                    NavigationBarItem(
+                        icon = { Icon(Icons.Default.BarChart, contentDescription = "Visualização") },
+                        label = { Text("Visualização", color = Color.White) },
+                        selected = false,
+                        onClick = onNavigateToVisualizacaoDados
+                    )
+                    NavigationBarItem(
+                        icon = { Icon(Icons.Default.Notifications, contentDescription = "Lembretes") },
+                        label = { Text("Lembretes", color = Color.White) },
+                        selected = false,
+                        onClick = onNavigateToLembretes
+                    )
+                    NavigationBarItem(
+                        icon = { Icon(Icons.Default.Warning, contentDescription = "Riscos") },
+                        label = { Text("Riscos", color = Color.White) },
+                        selected = false,
+                        onClick = onNavigateToBemEstar
+                    )
+                }
             },
             containerColor = Color.Black
         ) { innerPadding ->
@@ -130,7 +157,7 @@ fun AvaliacaoRiscosPsicossociaisScreen(
 
                 Divider(color = Color.DarkGray, thickness = 1.dp, modifier = Modifier.padding(vertical = 12.dp))
 
-                SectionTitle("Como está sua relação com a liderança?")
+                SectionTitle("Como você está hoje?")
                 opcoesRelacao.forEach { opcao ->
                     Row(
                         verticalAlignment = Alignment.CenterVertically,

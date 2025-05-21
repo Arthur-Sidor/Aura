@@ -46,6 +46,8 @@ dependencies {
         implementation libs.androidx.navigation.compose.v260
         implementation libs.androidx.material3.v101
         implementation(libs.androidx.material3.v121)
+        implementation libs.retrofit
+        implementation libs.converter.gson
 
         dependencies {
             implementation libs.androidx.navigation.compose
