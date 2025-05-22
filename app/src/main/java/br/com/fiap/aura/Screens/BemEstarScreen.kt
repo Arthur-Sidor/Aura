@@ -9,12 +9,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.BarChart
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.SentimentSatisfied
-import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -27,8 +22,11 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import br.com.fiap.aura.ApiMock.RetrofitClient
 import kotlinx.coroutines.launch
 import br.com.fiap.aura.Menu.SideMenu
+import br.com.fiap.aura.model.BemEstarRequestModel
+import br.com.fiap.aura.ApiMock.BemEstarApi
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -40,6 +38,7 @@ fun BemEstarScreen(
 ) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val coroutineScope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -72,9 +71,7 @@ fun BemEstarScreen(
                 TopAppBar(
                     title = { Text("Bem-estar", color = Color.White) },
                     navigationIcon = {
-                         @androidx.compose.runtime.Composable {
-                            Icon(Icons.Default.ArrowBack, contentDescription = "Voltar", tint = Color.White)
-                        }
+                        Icon(Icons.Default.ArrowBack, contentDescription = "Voltar", tint = Color.White)
                     },
                     colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Black)
                 )
@@ -107,13 +104,13 @@ fun BemEstarScreen(
                     )
                 }
             },
-            containerColor = Color.Black
+            containerColor = Color.Black,
+            snackbarHost = { SnackbarHost(snackbarHostState) }
         ) { innerPadding ->
 
             var humorSelecionado by remember { mutableStateOf<String?>(null) }
             var descricao by remember { mutableStateOf("") }
             var isFocused by remember { mutableStateOf(false) }
-
             val opcoesHumor = listOf("😀 Feliz", "😐 Neutro", "😔 Triste", "😠 Irritado", "😟 Ansioso")
 
             Column(
@@ -152,11 +149,7 @@ fun BemEstarScreen(
                             .clickable { humorSelecionado = humor }
                             .padding(12.dp)
                     ) {
-                        Text(
-                            text = humor,
-                            color = Color.White,
-                            fontSize = 16.sp
-                        )
+                        Text(text = humor, color = Color.White, fontSize = 16.sp)
                     }
                 }
 
@@ -167,7 +160,7 @@ fun BemEstarScreen(
                         .fillMaxWidth()
                         .height(140.dp)
                         .clip(RoundedCornerShape(8.dp))
-                        .background(Color.DarkGray)
+                        .background(Color(0xFF101010))
                         .border(
                             width = 2.dp,
                             color = if (isFocused) Color(0xFF4CAF50) else Color.Gray,
@@ -180,11 +173,8 @@ fun BemEstarScreen(
                         onValueChange = { descricao = it },
                         modifier = Modifier
                             .fillMaxSize()
-                            .onFocusChanged { focusState -> isFocused = focusState.isFocused },
-                        textStyle = TextStyle(
-                            color = Color.White,
-                            fontSize = 16.sp
-                        ),
+                            .onFocusChanged { isFocused = it.isFocused },
+                        textStyle = TextStyle(color = Color.White, fontSize = 16.sp),
                         cursorBrush = SolidColor(Color(0xFF4CAF50))
                     )
                     if (descricao.isEmpty() && !isFocused) {
@@ -200,7 +190,23 @@ fun BemEstarScreen(
 
                 Button(
                     onClick = {
-                        // ação salvar
+                        coroutineScope.launch {
+                            try {
+                                val response = RetrofitClient.bemEstarApi.enviarCheckin(
+                                    BemEstarRequestModel(
+                                        humor = humorSelecionado ?: "",
+                                        descricao = descricao
+                                    )
+                                )
+                                if (response.isSuccessful) {
+                                    snackbarHostState.showSnackbar("Check-in salvo com sucesso!")
+                                } else {
+                                    snackbarHostState.showSnackbar("Erro ao salvar check-in.")
+                                }
+                            } catch (e: Exception) {
+                                snackbarHostState.showSnackbar("Falha na conexão: ${e.message}")
+                            }
+                        }
                     },
                     enabled = humorSelecionado != null && descricao.isNotBlank(),
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50)),
@@ -210,7 +216,6 @@ fun BemEstarScreen(
                 }
 
                 Spacer(modifier = Modifier.height(40.dp))
-
             }
         }
     }

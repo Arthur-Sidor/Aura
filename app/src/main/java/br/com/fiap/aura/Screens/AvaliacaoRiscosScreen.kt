@@ -1,7 +1,6 @@
 package br.com.fiap.aura.Screens
 
 import android.util.Log
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -10,7 +9,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.BarChart
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.SentimentSatisfied
 import androidx.compose.material.icons.filled.Warning
@@ -22,8 +20,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import br.com.fiap.aura.ApiMock.RetrofitClient
 import kotlinx.coroutines.launch
 import br.com.fiap.aura.Menu.SideMenu
+import br.com.fiap.aura.model.AvaliacaoRiscosModelResposta
+import br.com.fiap.aura.model.AvaliacaoRiscosRequest
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -190,10 +191,27 @@ fun AvaliacaoRiscosPsicossociaisScreen(
 
                 Button(
                     onClick = {
-                        Log.d(
-                            "AVALIACAO",
-                            "Sentimento: $sentimento, Carga: $carga, Liderança: $relacaoLideranca, Alertas: $sinaisAlerta"
-                        )
+                        coroutineScope.launch {
+                            val respostas = listOf(
+                                AvaliacaoRiscosModelResposta("Como você está se sentindo hoje?", sentimento),
+                                AvaliacaoRiscosModelResposta("Como você avalia sua carga de trabalho?", carga),
+                                AvaliacaoRiscosModelResposta("Como você está hoje?", relacaoLideranca),
+                                AvaliacaoRiscosModelResposta("Você percebe algum sinal de alerta emocional?", sinaisAlerta)
+                            )
+
+                            val request = AvaliacaoRiscosRequest(respostas = respostas)
+
+                            try {
+                                val response = RetrofitClient.api.enviarRespostas(request)
+                                if (response.isSuccessful) {
+                                    Log.d("API", "Envio realizado com sucesso")
+                                } else {
+                                    Log.e("API", "Erro ao enviar: ${response.code()}")
+                                }
+                            } catch (e: Exception) {
+                                Log.e("API", "Erro na chamada: ${e.localizedMessage}")
+                            }
+                        }
                     },
                     modifier = Modifier
                         .align(Alignment.End)

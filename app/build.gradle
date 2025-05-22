@@ -49,10 +49,19 @@ dependencies {
         implementation libs.retrofit
         implementation libs.converter.gson
 
+
         dependencies {
             implementation libs.androidx.navigation.compose
             implementation libs.androidx.activity.compose.v172
             implementation libs.material3
+            // MockK - framework de mocking nativo para Kotlin
+            testImplementation libs.mockk
+// Mockito Core - base para mocking
+            testImplementation libs.mockito.core
+
+// Mockito Kotlin - sintaxe mais amigável para Kotlin
+            testImplementation libs.mockito.kotlin
+
         }
 
     }
