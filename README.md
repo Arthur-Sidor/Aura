@@ -88,26 +88,3 @@ PUT	/api/trees/{id}	Atualiza árvore existente
 DELETE	/api/trees/{id}	Remove árvore
 GET	/api/counts	Lista contagens de árvores
 POST	/api/counts	Registra ou atualiza contagem
-
-Adicione aqui mais endpoints conforme seu projeto.
-
-🧩 Exemplos de uso (via cURL)
-bash
-Copiar
-Editar
-# Criar árvore
-curl -X POST http://localhost:8080/api/trees \
-  -H "Content-Type: application/json" \
-  -d '{"species":"Oak","latitude":-23.5505,"longitude":-46.6333,"plantingDate":"2024-05-01","height":3.5}'
-
-# Obter todas as árvores
-curl http://localhost:8080/api/trees
-
-# Registrar contagem
-curl -X POST http://localhost:8080/api/counts \
-  -H "Content-Type: application/json" \
-  -d '{"treeId":1,"region":"Centro","count":5,"date":"2025-07-19"}'
-🔐 Segurança
-Endpoints protegidos com JWT ou Basic Auth
-
-Na imagem Docker, use variáveis de ambiente para jwt.secret, URL e credenciais do BD
