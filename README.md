@@ -51,5 +51,85 @@ A **TreeCount API** permite registrar, consultar e gerenciar árvores e suas con
 
 Clone o repositório:
 
+```bash
 git clone https://github.com/Arthur-Sidor/API_Java_TreeCount.git
 cd API_Java_TreeCount
+🔧 application.properties (exemplo)
+properties
+Copiar
+Editar
+spring.datasource.url=jdbc:h2:mem:treecountdb
+spring.datasource.username=sa
+spring.datasource.password=
+spring.h2.console.enabled=true
+
+jwt.secret=SEU_SEGREDO_JWT
+🐳 Docker Compose (opcional)
+bash
+Copiar
+Editar
+docker-compose up -d
+▶️ Como Executar
+✅ Com Maven
+bash
+Copiar
+Editar
+mvn spring-boot:run
+✅ Com Gradle
+bash
+Copiar
+Editar
+./gradlew bootRun
+🐳 Com Docker
+bash
+Copiar
+Editar
+docker build -t treecount-api .
+docker run -p 8080:8080 treecount-api
+🧪 Endpoints da API
+Método	Rota	Descrição
+GET	/api/trees	Lista todas as árvores
+GET	/api/trees/{id}	Retorna árvore por ID
+POST	/api/trees	Cria uma nova árvore
+PUT	/api/trees/{id}	Atualiza árvore existente
+DELETE	/api/trees/{id}	Remove árvore
+GET	/api/counts	Lista contagens de árvores
+POST	/api/counts	Cria/atualiza contagem
+
+📦 Exemplos de Requisições
+📌 Criar uma árvore
+bash
+Copiar
+Editar
+curl -X POST http://localhost:8080/api/trees \
+-H "Content-Type: application/json" \
+-d '{"species":"Ipê Amarelo","latitude":-23.55,"longitude":-46.63,"plantingDate":"2023-03-20","height":4.2}'
+📌 Registrar contagem
+bash
+Copiar
+Editar
+curl -X POST http://localhost:8080/api/counts \
+-H "Content-Type: application/json" \
+-d '{"treeId":1,"region":"Zona Sul","count":12,"date":"2025-07-19"}'
+🔐 Segurança
+Autenticação via JWT (ou outra estratégia configurada)
+
+Configure o jwt.secret no application.properties
+
+Proteção de endpoints sensíveis com Spring Security
+
+🧪 Testes
+Execute testes automatizados com:
+
+bash
+Copiar
+Editar
+mvn test
+ou
+
+bash
+Copiar
+Editar
+./gradlew test
+📘 Documentação
+Acesse: http://localhost:8080/swagger-ui.html
