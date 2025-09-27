@@ -36,19 +36,20 @@ fun WelcomeScreen(onStartClick: () -> Unit) {
             Icon(
                 imageVector = Icons.Default.SelfImprovement,
                 contentDescription = "Ícone do app",
-                tint = Color(0xFF4CAF50), // verde suave
-                modifier = Modifier.size(96.dp)
+                tint = Color(0xFF56A8C2), // verde suave
+                modifier = Modifier.size(160.dp)
             )
 
             Text(
-                text = "Softtek Saúde Mental",
+                text = "SoftMind",
+                textAlign = TextAlign.Center,
                 color = Color.White,
-                fontSize = 24.sp,
+                fontSize = 48.sp,
                 fontWeight = FontWeight.Bold
             )
 
             Text(
-                text = "Bem-vindo(a) ao seu espaço de bem-estar.",
+                text = "Seu parceiro de bem-estar.",
                 color = Color.Gray,
                 fontSize = 16.sp,
                 textAlign = TextAlign.Center
@@ -56,7 +57,7 @@ fun WelcomeScreen(onStartClick: () -> Unit) {
 
             Button(
                 onClick = onStartClick,
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50))
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF56A8C2))
             ) {
                 Text("Começar", color = Color.White)
             }
