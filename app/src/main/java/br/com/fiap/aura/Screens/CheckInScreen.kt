@@ -1,4 +1,3 @@
-package br.com.fiap.aura.Screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -9,7 +8,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -22,15 +21,16 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import br.com.fiap.aura.ApiMock.RetrofitClient
-import kotlinx.coroutines.launch
 import br.com.fiap.aura.Menu.SideMenu
-import br.com.fiap.aura.model.BemEstarRequestModel
-import br.com.fiap.aura.ApiMock.BemEstarApi
+import br.com.fiap.aura.ViewModel.CheckInViewModel
+
+
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BemEstarScreen(
+fun CheckInScreen(
+    viewModel: CheckInViewModel = CheckInViewModel(),
     onNavigateToVisualizacaoDados: () -> Unit,
     onNavigateToLembretes: () -> Unit,
     onNavigateToRecursosApoio: () -> Unit,
@@ -40,13 +40,19 @@ fun BemEstarScreen(
     val coroutineScope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
+    // Observa mensagens da ViewModel e exibe Snackbar
+    LaunchedEffect(viewModel.snackbarMessage.value) {
+        viewModel.snackbarMessage.value?.let {
+            snackbarHostState.showSnackbar(it)
+            viewModel.snackbarMessage.value = null
+        }
+    }
+
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
             SideMenu(
-                onNavigateToBemEstar = {
-                    coroutineScope.launch { drawerState.close() }
-                },
+                onNavigateToCheckIn = { coroutineScope.launch { drawerState.close() } },
                 onNavigateToVisualizacaoDados = {
                     coroutineScope.launch { drawerState.close() }
                     onNavigateToVisualizacaoDados()
@@ -69,49 +75,21 @@ fun BemEstarScreen(
         Scaffold(
             topBar = {
                 TopAppBar(
-                    title = { Text("Bem-estar", color = Color.White) },
+                    title = { Text("CheckIn", color = Color.White) },
                     navigationIcon = {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Voltar", tint = Color.White)
+                        IconButton(onClick = { coroutineScope.launch { drawerState.open() } }) {
+                            Icon(Icons.Default.Menu, contentDescription = "Abrir menu", tint = Color.White)
+                        }
                     },
                     colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Black)
                 )
-            },
-            bottomBar = {
-                NavigationBar(containerColor = Color.Black) {
-                    NavigationBarItem(
-                        icon = { Icon(Icons.Default.SentimentSatisfied, contentDescription = "Bem-Estar") },
-                        label = { Text("RecursosApoio", color = Color.White) },
-                        selected = false,
-                        onClick = onNavigateToRecursosApoio
-                    )
-                    NavigationBarItem(
-                        icon = { Icon(Icons.Default.BarChart, contentDescription = "Visualização") },
-                        label = { Text("Visualização", color = Color.White) },
-                        selected = false,
-                        onClick = onNavigateToVisualizacaoDados
-                    )
-                    NavigationBarItem(
-                        icon = { Icon(Icons.Default.Notifications, contentDescription = "Lembretes") },
-                        label = { Text("Lembretes", color = Color.White) },
-                        selected = false,
-                        onClick = onNavigateToLembretes
-                    )
-                    NavigationBarItem(
-                        icon = { Icon(Icons.Default.Warning, contentDescription = "Riscos") },
-                        label = { Text("Riscos", color = Color.White) },
-                        selected = false,
-                        onClick = onNavigateToAvaliacaoRiscos
-                    )
-                }
             },
             containerColor = Color.Black,
             snackbarHost = { SnackbarHost(snackbarHostState) }
         ) { innerPadding ->
 
-            var humorSelecionado by remember { mutableStateOf<String?>(null) }
-            var descricao by remember { mutableStateOf("") }
-            var isFocused by remember { mutableStateOf(false) }
             val opcoesHumor = listOf("😀 Feliz", "😐 Neutro", "😔 Triste", "😠 Irritado", "😟 Ansioso")
+            var isFocused by remember { mutableStateOf(false) }
 
             Column(
                 modifier = Modifier
@@ -123,7 +101,7 @@ fun BemEstarScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Acompanhamento do Bem-Estar Emocional",
+                    text = "CheckIn Emocional",
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.White,
@@ -143,10 +121,10 @@ fun BemEstarScreen(
                             .fillMaxWidth()
                             .padding(vertical = 4.dp)
                             .background(
-                                if (humorSelecionado == humor) Color(0xFF4CAF50) else Color.DarkGray,
+                                if (viewModel.humorSelecionado.value == humor) Color(0xFF4CAF50) else Color.DarkGray,
                                 shape = RoundedCornerShape(8.dp)
                             )
-                            .clickable { humorSelecionado = humor }
+                            .clickable { viewModel.humorSelecionado.value = humor }
                             .padding(12.dp)
                     ) {
                         Text(text = humor, color = Color.White, fontSize = 16.sp)
@@ -169,15 +147,15 @@ fun BemEstarScreen(
                         .padding(12.dp)
                 ) {
                     BasicTextField(
-                        value = descricao,
-                        onValueChange = { descricao = it },
+                        value = viewModel.descricao.value,
+                        onValueChange = { viewModel.descricao.value = it },
                         modifier = Modifier
                             .fillMaxSize()
                             .onFocusChanged { isFocused = it.isFocused },
                         textStyle = TextStyle(color = Color.White, fontSize = 16.sp),
                         cursorBrush = SolidColor(Color(0xFF4CAF50))
                     )
-                    if (descricao.isEmpty() && !isFocused) {
+                    if (viewModel.descricao.value.isEmpty() && !isFocused) {
                         Text(
                             text = "Descreva seu dia ou sentimentos",
                             color = Color.Gray,
@@ -189,26 +167,8 @@ fun BemEstarScreen(
                 Spacer(modifier = Modifier.height(24.dp))
 
                 Button(
-                    onClick = {
-                        coroutineScope.launch {
-                            try {
-                                val response = RetrofitClient.bemEstarApi.enviarCheckin(
-                                    BemEstarRequestModel(
-                                        humor = humorSelecionado ?: "",
-                                        descricao = descricao
-                                    )
-                                )
-                                if (response.isSuccessful) {
-                                    snackbarHostState.showSnackbar("Check-in salvo com sucesso!")
-                                } else {
-                                    snackbarHostState.showSnackbar("Erro ao salvar check-in.")
-                                }
-                            } catch (e: Exception) {
-                                snackbarHostState.showSnackbar("Falha na conexão: ${e.message}")
-                            }
-                        }
-                    },
-                    enabled = humorSelecionado != null && descricao.isNotBlank(),
+                    onClick = { viewModel.enviarCheckIn() },
+                    enabled = viewModel.humorSelecionado.value != null && viewModel.descricao.value.isNotBlank(),
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50)),
                     modifier = Modifier.fillMaxWidth()
                 ) {
@@ -216,6 +176,45 @@ fun BemEstarScreen(
                 }
 
                 Spacer(modifier = Modifier.height(40.dp))
+
+                // Histórico
+                Text(
+                    text = "Histórico de Check-ins",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White,
+                    modifier = Modifier.padding(bottom = 8.dp)
+                )
+
+                viewModel.checkInHistory.forEach { checkIn ->
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 4.dp)
+                            .background(Color.DarkGray, shape = RoundedCornerShape(8.dp))
+                            .padding(12.dp)
+                    ) {
+                        Column {
+                            Text(text = checkIn.humor, color = Color.White, fontWeight = FontWeight.Bold)
+                            Text(text = checkIn.descricao, color = Color.White)
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                // Resumo
+                val humorCounts: Map<String, Int> = viewModel.checkInHistory.groupingBy { it.humor }.eachCount()
+                Text(
+                    text = "Resumo dos humores:",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White,
+                    modifier = Modifier.padding(bottom = 8.dp)
+                )
+                humorCounts.forEach { (humor, count) ->
+                    Text(text = "$humor: $count vezes", color = Color.White)
+                }
             }
         }
     }

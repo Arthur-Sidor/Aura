@@ -20,9 +20,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import br.com.fiap.aura.ApiMock.RetrofitClient
+
 import kotlinx.coroutines.launch
 import br.com.fiap.aura.Menu.SideMenu
+import br.com.fiap.aura.api.RetrofitClient
 import br.com.fiap.aura.model.AvaliacaoRiscosModelResposta
 import br.com.fiap.aura.model.AvaliacaoRiscosRequest
 
@@ -49,7 +50,7 @@ fun AvaliacaoRiscosPsicossociaisScreen(
         drawerState = drawerState,
         drawerContent = {
             SideMenu(
-                onNavigateToBemEstar = {
+                onNavigateToCheckIn = {
                     coroutineScope.launch { drawerState.close() }
                     onNavigateToBemEstar()
                 },
@@ -199,18 +200,7 @@ fun AvaliacaoRiscosPsicossociaisScreen(
                                 AvaliacaoRiscosModelResposta("Você percebe algum sinal de alerta emocional?", sinaisAlerta)
                             )
 
-                            val request = AvaliacaoRiscosRequest(respostas = respostas)
 
-                            try {
-                                val response = RetrofitClient.api.enviarRespostas(request)
-                                if (response.isSuccessful) {
-                                    Log.d("API", "Envio realizado com sucesso")
-                                } else {
-                                    Log.e("API", "Erro ao enviar: ${response.code()}")
-                                }
-                            } catch (e: Exception) {
-                                Log.e("API", "Erro na chamada: ${e.localizedMessage}")
-                            }
                         }
                     },
                     modifier = Modifier

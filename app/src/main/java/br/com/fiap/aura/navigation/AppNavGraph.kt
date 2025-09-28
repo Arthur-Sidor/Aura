@@ -1,8 +1,10 @@
+
 package br.com.fiap.aura.navigation
 
+import CheckInScreen
 import android.widget.Toast
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -136,8 +138,8 @@ fun AppNavGraph(
                     launchSingleTop = true
                 }
             }
-            BemEstarScreen(
-                //onLogoutAction = onLogout, // Você precisaria adicionar este parâmetro à BemEstarScreen
+            CheckInScreen(
+                //onLogoutAction = onLogout, // Você precisaria adicionar este parâmetro à CheckInScreen
                 onNavigateToVisualizacaoDados = { navController.navigate(Screen.VisualizacaoDados.route) },
                 onNavigateToLembretes = { navController.navigate(Screen.Lembretes.route) },
                 onNavigateToRecursosApoio = { navController.navigate(Screen.RecursosApoio.route) },

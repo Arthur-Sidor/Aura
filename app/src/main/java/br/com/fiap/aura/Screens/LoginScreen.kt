@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 // Remover imports desnecessários de Row, width, size se AppBrandingFooter for o único uso
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
@@ -43,6 +42,9 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import br.com.fiap.aura.Components.AppBrandingFooter
+import br.com.fiap.aura.Components.AuthTextField
+
 // import br.com.fiap.aura.R
 
 // Cores podem ser movidas para um arquivo central de Tema/Cores
@@ -97,7 +99,13 @@ fun LoginScreen(
                         // emailError = if (!android.util.Patterns.EMAIL_ADDRESS.matcher(it).matches()) "Email inválido" else null
                     },
                     label = "Email", // stringResource(R.string.email_label)
-                    leadingIcon = { Icon(Icons.Default.Email, contentDescription = "Email", tint = PrimaryAppColor) },
+                    leadingIcon = {
+                        Icon(
+                            Icons.Default.Email,
+                            contentDescription = "Email",
+                            tint = PrimaryAppColor
+                        )
+                    },
                     keyboardType = KeyboardType.Email,
                     isError = emailError != null,
                     supportingText = emailError?.let { { Text(it) } }
@@ -112,13 +120,24 @@ fun LoginScreen(
                         // senhaError = if (it.length < 6) "Senha muito curta" else null
                     },
                     label = "Senha", // stringResource(R.string.password_label)
-                    leadingIcon = { Icon(Icons.Default.Lock, contentDescription = "Senha", tint = PrimaryAppColor) },
+                    leadingIcon = {
+                        Icon(
+                            Icons.Default.Lock,
+                            contentDescription = "Senha",
+                            tint = PrimaryAppColor
+                        )
+                    },
                     visualTransformation = if (senhaVisivel) VisualTransformation.None else PasswordVisualTransformation(),
                     trailingIcon = {
-                        val image = if (senhaVisivel) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
+                        val image =
+                            if (senhaVisivel) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
                         val description = if (senhaVisivel) "Esconder senha" else "Mostrar senha"
                         IconButton(onClick = { senhaVisivel = !senhaVisivel }) {
-                            Icon(imageVector = image, contentDescription = description, tint = PrimaryAppColor)
+                            Icon(
+                                imageVector = image,
+                                contentDescription = description,
+                                tint = PrimaryAppColor
+                            )
                         }
                     },
                     keyboardType = KeyboardType.Password,

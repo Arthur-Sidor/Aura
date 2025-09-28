@@ -1,4 +1,4 @@
-package br.com.fiap.aura.Screens // Ou o pacote de sua escolha para componentes comuns
+package br.com.fiap.aura.Components // Ou o pacote de sua escolha para componentes comuns
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row

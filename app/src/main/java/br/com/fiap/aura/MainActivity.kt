@@ -1,6 +1,5 @@
 package br.com.fiap.aura
 
-
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -14,7 +13,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             AuraTheme {
                 Surface {
-                    AppNavGraph()
+                    AppNavGraph() // Chama o NavGraph principal do app
                 }
             }
         }

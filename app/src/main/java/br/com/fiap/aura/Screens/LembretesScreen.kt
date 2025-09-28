@@ -43,7 +43,7 @@ fun LembretesScreen(
         drawerState = drawerState,
         drawerContent = {
             SideMenu(
-                onNavigateToBemEstar = {
+                onNavigateToCheckIn = {
                     coroutineScope.launch { drawerState.close() }
                     onNavigateToBemEstar()
                 },

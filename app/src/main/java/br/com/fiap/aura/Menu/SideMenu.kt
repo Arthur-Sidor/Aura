@@ -1,3 +1,4 @@
+
 package br.com.fiap.aura.Menu
 
 import androidx.compose.foundation.background
@@ -13,7 +14,7 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun SideMenu(
-    onNavigateToBemEstar: () -> Unit,
+    onNavigateToCheckIn: () -> Unit,
     onNavigateToVisualizacaoDados: () -> Unit,
     onNavigateToLembretes: () -> Unit,
     onNavigateToRecursosApoio: () -> Unit,
@@ -27,9 +28,9 @@ fun SideMenu(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        MenuItem("Bem-Estar", onNavigateToBemEstar)
+        MenuItem("Checkin", onNavigateToCheckIn)
         MenuItem("Visualização de Dados", onNavigateToVisualizacaoDados)
-        MenuItem("Lembretes e Dicas", onNavigateToLembretes)
+        MenuItem("Carga De Trabalho", onNavigateToLembretes)
         MenuItem("Recursos de Apoio", onNavigateToRecursosApoio)
         MenuItem("Avaliação de Riscos", onNavigateToAvaliacaoRiscos)
     }
