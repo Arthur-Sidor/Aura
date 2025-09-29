@@ -16,9 +16,9 @@ import androidx.compose.ui.unit.sp
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RecursosApoioScreen(
-    onNavigateToBemEstar: () -> Unit = {},
+    onNavigateToCheckIn: () -> Unit = {},
     onNavigateToVisualizacaoDados: () -> Unit = {},
-    onNavigateToLembretes: () -> Unit = {},
+    onNavigateToCarga: () -> Unit = {},
     onNavigateToAvaliacaoRiscos: () -> Unit = {}
 ) {
     Scaffold(
@@ -26,7 +26,7 @@ fun RecursosApoioScreen(
             TopAppBar(
                 title = { Text("Recursos de Apoio", color = Color.White) },
                 navigationIcon = {
-                    IconButton(onClick = onNavigateToBemEstar) {
+                    IconButton(onClick = onNavigateToCheckIn) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Voltar", tint = Color.White)
                     }
                 },
@@ -39,7 +39,7 @@ fun RecursosApoioScreen(
                     icon = { Icon(Icons.Default.SentimentSatisfied, contentDescription = "Bem-Estar") },
                     label = { Text("Bem-Estar", color = Color.White) },
                     selected = false,
-                    onClick = onNavigateToBemEstar
+                    onClick = onNavigateToCheckIn
                 )
                 NavigationBarItem(
                     icon = { Icon(Icons.Default.BarChart, contentDescription = "Visualização") },
@@ -51,7 +51,7 @@ fun RecursosApoioScreen(
                     icon = { Icon(Icons.Default.Notifications, contentDescription = "Lembretes") },
                     label = { Text("Lembretes", color = Color.White) },
                     selected = false,
-                    onClick = onNavigateToLembretes
+                    onClick = onNavigateToCarga
                 )
                 NavigationBarItem(
                     icon = { Icon(Icons.Default.Warning, contentDescription = "Riscos") },

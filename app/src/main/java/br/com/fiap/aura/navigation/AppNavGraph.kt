@@ -47,9 +47,9 @@ sealed class Screen(val route: String) {
     object Entry : Screen("entry_screen")
     object Login : Screen("login_screen")
     object SignUp : Screen("signup_screen")
-    object BemEstar : Screen("bem_estar_screen")
+    object CheckIn : Screen("checkin_screen")
     object VisualizacaoDados : Screen("visualizacao_dados_screen")
-    object Lembretes : Screen("lembretes_screen")
+    object Carga : Screen("carga_screen")
     object RecursosApoio : Screen("recursos_apoio_screen")
     object AvaliacaoRiscos : Screen("avaliacao_riscos_screen")
 }
@@ -62,8 +62,8 @@ fun AppNavGraph(
 
     NavHost(
         navController = navController,
-        startDestination = if (FakeAuthManager.loggedInUserEmail != null) Screen.BemEstar.route else Screen.Welcome.route
-        // Se já estiver logado (ex: app reiniciado), vai direto para BemEstar
+        startDestination = if (FakeAuthManager.loggedInUserEmail != null) Screen.CheckIn.route else Screen.Welcome.route
+        // Se já estiver logado (ex: app reiniciado), vai direto para CheckIn
     ) {
         composable(Screen.Welcome.route) {
             WelcomeScreen(
@@ -83,7 +83,7 @@ fun AppNavGraph(
                 onLoginClick = { email, senha ->
                     if (FakeAuthManager.loginUser(email, senha)) {
                         // Login bem-sucedido
-                        navController.navigate(Screen.BemEstar.route) {
+                        navController.navigate(Screen.CheckIn.route) {
                             popUpTo(Screen.Welcome.route) { inclusive = true } // Limpa toda a pilha até Welcome
                             launchSingleTop = true
                         }
@@ -116,7 +116,7 @@ fun AppNavGraph(
                         // Cadastro e login automático simulado
                         FakeAuthManager.loginUser(email, senha) // Loga o usuário recém-cadastrado
                         Toast.makeText(context, "Cadastro realizado com sucesso!", Toast.LENGTH_SHORT).show()
-                        navController.navigate(Screen.BemEstar.route) {
+                        navController.navigate(Screen.CheckIn.route) {
                             popUpTo(Screen.Welcome.route) { inclusive = true } // Limpa toda a pilha até Welcome
                             launchSingleTop = true
                         }
@@ -129,57 +129,59 @@ fun AppNavGraph(
             )
         }
 
-        composable(Screen.BemEstar.route) {
+        composable(Screen.CheckIn.route) {
             // Adicionar um "logout" simulado para testar
             val onLogout = {
                 FakeAuthManager.logoutUser()
                 navController.navigate(Screen.Entry.route) {
-                    popUpTo(Screen.BemEstar.route) { inclusive = true }
+                    popUpTo(Screen.CheckIn.route) { inclusive = true }
                     launchSingleTop = true
                 }
             }
             CheckInScreen(
                 //onLogoutAction = onLogout, // Você precisaria adicionar este parâmetro à CheckInScreen
                 onNavigateToVisualizacaoDados = { navController.navigate(Screen.VisualizacaoDados.route) },
-                onNavigateToLembretes = { navController.navigate(Screen.Lembretes.route) },
+                onNavigateToCarga = { navController.navigate(Screen.Carga.route) },
                 onNavigateToRecursosApoio = { navController.navigate(Screen.RecursosApoio.route) },
                 onNavigateToAvaliacaoRiscos = { navController.navigate(Screen.AvaliacaoRiscos.route) }
             )
         }
 
-        // ... Outras rotas (VisualizacaoDados, Lembretes, etc.) permanecem as mesmas
+        // ... Outras rotas (VisualizacaoDados, Carga, etc.) permanecem as mesmas
         composable(Screen.VisualizacaoDados.route) {
             VisualizacaoDadosScreen(
-                onNavigateToBemEstar = { navController.navigate(Screen.BemEstar.route) },
-                onNavigateToLembretes = { navController.navigate(Screen.Lembretes.route) },
+                onNavigateToCheckIn = { navController.navigate(Screen.CheckIn.route) },
+                onNavigateToCarga = { navController.navigate(Screen.Carga.route) },
                 onNavigateToRecursosApoio = { navController.navigate(Screen.RecursosApoio.route) },
                 onNavigateToAvaliacaoRiscos = { navController.navigate(Screen.AvaliacaoRiscos.route) }
             )
         }
 
-        composable(Screen.Lembretes.route) {
-            LembretesScreen(
-                onNavigateToBemEstar = { navController.navigate(Screen.BemEstar.route) },
+        composable(Screen.Carga.route) {
+            CargaScreen(
+                onNavigateToCheckIn = { navController.navigate(Screen.CheckIn.route) },
                 onNavigateToVisualizacaoDados = { navController.navigate(Screen.VisualizacaoDados.route) },
+                onNavigateToCarga = { navController.navigate(Screen.Carga.route) },
                 onNavigateToRecursosApoio = { navController.navigate(Screen.RecursosApoio.route) },
                 onNavigateToAvaliacaoRiscos = { navController.navigate(Screen.AvaliacaoRiscos.route) }
             )
         }
+
 
         composable(Screen.RecursosApoio.route) {
             RecursosApoioScreen(
-                onNavigateToBemEstar = { navController.navigate(Screen.BemEstar.route) },
+                onNavigateToCheckIn = { navController.navigate(Screen.CheckIn.route) },
                 onNavigateToVisualizacaoDados = { navController.navigate(Screen.VisualizacaoDados.route) },
-                onNavigateToLembretes = { navController.navigate(Screen.Lembretes.route) },
+                onNavigateToCarga = { navController.navigate(Screen.Carga.route) },
                 onNavigateToAvaliacaoRiscos = { navController.navigate(Screen.AvaliacaoRiscos.route) }
             )
         }
 
         composable(Screen.AvaliacaoRiscos.route) {
             AvaliacaoRiscosPsicossociaisScreen(
-                onNavigateToBemEstar = { navController.navigate(Screen.BemEstar.route) },
+                onNavigateToCheckIn = { navController.navigate(Screen.CheckIn.route) },
                 onNavigateToVisualizacaoDados = { navController.navigate(Screen.VisualizacaoDados.route) },
-                onNavigateToLembretes = { navController.navigate(Screen.Lembretes.route) },
+                onNavigateToCarga = { navController.navigate(Screen.Carga.route) },
                 onNavigateToRecursosApoio = { navController.navigate(Screen.RecursosApoio.route) }
             )
         }

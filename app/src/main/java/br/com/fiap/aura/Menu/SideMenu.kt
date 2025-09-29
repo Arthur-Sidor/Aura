@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.sp
 fun SideMenu(
     onNavigateToCheckIn: () -> Unit,
     onNavigateToVisualizacaoDados: () -> Unit,
-    onNavigateToLembretes: () -> Unit,
+    onNavigateToCarga: () -> Unit,
     onNavigateToRecursosApoio: () -> Unit,
     onNavigateToAvaliacaoRiscos: () -> Unit,
     modifier: Modifier = Modifier
@@ -30,7 +30,7 @@ fun SideMenu(
     ) {
         MenuItem("Checkin", onNavigateToCheckIn)
         MenuItem("Visualização de Dados", onNavigateToVisualizacaoDados)
-        MenuItem("Carga De Trabalho", onNavigateToLembretes)
+        MenuItem("Carga De Trabalho", onNavigateToCarga)
         MenuItem("Recursos de Apoio", onNavigateToRecursosApoio)
         MenuItem("Avaliação de Riscos", onNavigateToAvaliacaoRiscos)
     }

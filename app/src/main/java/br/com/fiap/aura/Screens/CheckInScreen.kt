@@ -32,7 +32,7 @@ import kotlinx.coroutines.launch
 fun CheckInScreen(
     viewModel: CheckInViewModel = CheckInViewModel(),
     onNavigateToVisualizacaoDados: () -> Unit,
-    onNavigateToLembretes: () -> Unit,
+    onNavigateToCarga: () -> Unit,
     onNavigateToRecursosApoio: () -> Unit,
     onNavigateToAvaliacaoRiscos: () -> Unit
 ) {
@@ -57,9 +57,9 @@ fun CheckInScreen(
                     coroutineScope.launch { drawerState.close() }
                     onNavigateToVisualizacaoDados()
                 },
-                onNavigateToLembretes = {
+                onNavigateToCarga = {
                     coroutineScope.launch { drawerState.close() }
-                    onNavigateToLembretes()
+                    onNavigateToCarga()
                 },
                 onNavigateToRecursosApoio = {
                     coroutineScope.launch { drawerState.close() }

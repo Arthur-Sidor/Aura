@@ -1,6 +1,6 @@
 package br.com.fiap.aura.Screens
 
-import android.util.Log
+
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -20,19 +20,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
 import kotlinx.coroutines.launch
 import br.com.fiap.aura.Menu.SideMenu
-import br.com.fiap.aura.api.RetrofitClient
 import br.com.fiap.aura.model.AvaliacaoRiscosModelResposta
-import br.com.fiap.aura.model.AvaliacaoRiscosRequest
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AvaliacaoRiscosPsicossociaisScreen(
-    onNavigateToBemEstar: () -> Unit,
+    onNavigateToCheckIn: () -> Unit,
     onNavigateToVisualizacaoDados: () -> Unit,
-    onNavigateToLembretes: () -> Unit,
+    onNavigateToCarga: () -> Unit,
     onNavigateToRecursosApoio: () -> Unit
 ) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -52,15 +50,15 @@ fun AvaliacaoRiscosPsicossociaisScreen(
             SideMenu(
                 onNavigateToCheckIn = {
                     coroutineScope.launch { drawerState.close() }
-                    onNavigateToBemEstar()
+                    onNavigateToCheckIn()
                 },
                 onNavigateToVisualizacaoDados = {
                     coroutineScope.launch { drawerState.close() }
                     onNavigateToVisualizacaoDados()
                 },
-                onNavigateToLembretes = {
+                onNavigateToCarga = {
                     coroutineScope.launch { drawerState.close() }
-                    onNavigateToLembretes()
+                    onNavigateToCarga()
                 },
                 onNavigateToRecursosApoio = {
                     coroutineScope.launch { drawerState.close() }
@@ -102,13 +100,13 @@ fun AvaliacaoRiscosPsicossociaisScreen(
                         icon = { Icon(Icons.Default.Notifications, contentDescription = "Lembretes") },
                         label = { Text("Lembretes", color = Color.White) },
                         selected = false,
-                        onClick = onNavigateToLembretes
+                        onClick = onNavigateToCarga
                     )
                     NavigationBarItem(
                         icon = { Icon(Icons.Default.Warning, contentDescription = "Riscos") },
                         label = { Text("Riscos", color = Color.White) },
                         selected = false,
-                        onClick = onNavigateToBemEstar
+                        onClick = onNavigateToCheckIn
                     )
                 }
             },

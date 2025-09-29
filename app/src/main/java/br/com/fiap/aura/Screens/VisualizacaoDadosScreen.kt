@@ -17,8 +17,8 @@ import androidx.compose.ui.unit.sp
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VisualizacaoDadosScreen(
-    onNavigateToBemEstar: () -> Unit = {},
-    onNavigateToLembretes: () -> Unit = {},
+    onNavigateToCheckIn: () -> Unit = {},
+    onNavigateToCarga: () -> Unit = {},
     onNavigateToRecursosApoio: () -> Unit = {},
     onNavigateToAvaliacaoRiscos: () -> Unit = {}
 ) {
@@ -27,7 +27,7 @@ fun VisualizacaoDadosScreen(
             TopAppBar(
                 title = { Text("Visualização de Dados", color = Color.White) },
                 navigationIcon = {
-                    IconButton(onClick = onNavigateToBemEstar) {
+                    IconButton(onClick = onNavigateToCheckIn) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Voltar", tint = Color.White)
                     }
                 },
@@ -40,7 +40,7 @@ fun VisualizacaoDadosScreen(
                     icon = { Icon(Icons.Default.SentimentSatisfied, contentDescription = "Bem-Estar") },
                     label = { Text("Bem-Estar", color = Color.White) },
                     selected = false,
-                    onClick = onNavigateToBemEstar
+                    onClick = onNavigateToCheckIn
                 )
                 NavigationBarItem(
                     icon = { Icon(Icons.Default.BarChart, contentDescription = "Visualização") },
@@ -52,7 +52,7 @@ fun VisualizacaoDadosScreen(
                     icon = { Icon(Icons.Default.Notifications, contentDescription = "Lembretes") },
                     label = { Text("Lembretes", color = Color.White) },
                     selected = false,
-                    onClick = onNavigateToLembretes
+                    onClick = onNavigateToCarga
                 )
                 NavigationBarItem(
                     icon = { Icon(Icons.Default.Warning, contentDescription = "Riscos") },
