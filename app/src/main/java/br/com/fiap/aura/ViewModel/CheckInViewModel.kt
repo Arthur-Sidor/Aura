@@ -16,7 +16,9 @@ class CheckInViewModel(
     val descricao = mutableStateOf("")
     val checkInHistory = mutableStateListOf<CheckInModel>()
     val snackbarMessage = mutableStateOf<String?>(null)
+    val isLoading = mutableStateOf(false)
 
+    // Enviar novo check-in
     fun enviarCheckIn() {
         val humor = humorSelecionado.value
         val desc = descricao.value
@@ -28,21 +30,45 @@ class CheckInViewModel(
 
         viewModelScope.launch {
             try {
+                isLoading.value = true
                 val checkIn = CheckInModel(
                     humor = humor,
                     descricao = desc
                 )
                 val response = repository.enviarCheckin(checkIn)
                 if (response.isSuccessful) {
-                    checkInHistory.add(checkIn)
                     snackbarMessage.value = "Check-in salvo com sucesso!"
                     humorSelecionado.value = null
                     descricao.value = ""
+                    // Atualiza histórico chamando do backend
+                    listarCheckIns()
                 } else {
                     snackbarMessage.value = "Erro ao salvar check-in."
                 }
             } catch (e: Exception) {
                 snackbarMessage.value = "Falha na conexão: ${e.message}"
+            } finally {
+                isLoading.value = false
+            }
+        }
+    }
+
+    // Buscar histórico de check-ins
+    fun listarCheckIns() {
+        viewModelScope.launch {
+            try {
+                isLoading.value = true
+                val response = repository.listarCheckins()
+                if (response.isSuccessful) {
+                    checkInHistory.clear()
+                    response.body()?.let { checkInHistory.addAll(it) }
+                } else {
+                    snackbarMessage.value = "Erro ao carregar histórico."
+                }
+            } catch (e: Exception) {
+                snackbarMessage.value = "Falha na conexão: ${e.message}"
+            } finally {
+                isLoading.value = false
             }
         }
     }

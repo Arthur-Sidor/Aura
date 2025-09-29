@@ -11,4 +11,8 @@ class CheckInRepository(private val api: CheckInApi = RetrofitClient.checkInApi)
     suspend fun enviarCheckin(checkIn: CheckInModel): Response<Unit> {
         return api.enviarCheckin(checkIn)
     }
+
+    suspend fun listarCheckins(): Response<List<CheckInModel>> {
+        return api.listarCheckins()
+    }
 }
