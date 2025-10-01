@@ -1,4 +1,4 @@
-package br.com.fiap.aura.repository
+package br.com.fiap.aura.Repository
 
 import br.com.fiap.aura.api.RetrofitClient
 import br.com.fiap.aura.model.CargaModel

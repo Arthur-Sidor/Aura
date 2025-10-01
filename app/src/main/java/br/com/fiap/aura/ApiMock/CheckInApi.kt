@@ -1,7 +1,5 @@
 package br.com.fiap.aura.api
 
-
-
 import br.com.fiap.aura.model.CheckInModel
 import retrofit2.Response
 import retrofit2.http.Body

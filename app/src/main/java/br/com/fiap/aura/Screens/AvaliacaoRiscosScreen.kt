@@ -31,7 +31,7 @@ fun AvaliacaoRiscosPsicossociaisScreen(
     onNavigateToCheckIn: () -> Unit,
     onNavigateToVisualizacaoDados: () -> Unit,
     onNavigateToCarga: () -> Unit,
-    onNavigateToRecursosApoio: () -> Unit
+    onNavigateToAlertas: () -> Unit
 ) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val coroutineScope = rememberCoroutineScope()
@@ -60,12 +60,13 @@ fun AvaliacaoRiscosPsicossociaisScreen(
                     coroutineScope.launch { drawerState.close() }
                     onNavigateToCarga()
                 },
-                onNavigateToRecursosApoio = {
+                onNavigateToAlertas = {
                     coroutineScope.launch { drawerState.close() }
-                    onNavigateToRecursosApoio()
+                    onNavigateToAlertas()
                 },
                 onNavigateToAvaliacaoRiscos = {
                     coroutineScope.launch { drawerState.close() }
+                    onNavigateToAlertas()
                 }
             )
         }
@@ -81,34 +82,6 @@ fun AvaliacaoRiscosPsicossociaisScreen(
                     },
                     colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Black)
                 )
-            },
-            bottomBar = {
-                NavigationBar(containerColor = Color.Black) {
-                    NavigationBarItem(
-                        icon = { Icon(Icons.Default.SentimentSatisfied, contentDescription = "Bem-Estar") },
-                        label = { Text("RecursosApoio", color = Color.White) },
-                        selected = false,
-                        onClick = onNavigateToRecursosApoio
-                    )
-                    NavigationBarItem(
-                        icon = { Icon(Icons.Default.BarChart, contentDescription = "Visualização") },
-                        label = { Text("Visualização", color = Color.White) },
-                        selected = false,
-                        onClick = onNavigateToVisualizacaoDados
-                    )
-                    NavigationBarItem(
-                        icon = { Icon(Icons.Default.Notifications, contentDescription = "Lembretes") },
-                        label = { Text("Lembretes", color = Color.White) },
-                        selected = false,
-                        onClick = onNavigateToCarga
-                    )
-                    NavigationBarItem(
-                        icon = { Icon(Icons.Default.Warning, contentDescription = "Riscos") },
-                        label = { Text("Riscos", color = Color.White) },
-                        selected = false,
-                        onClick = onNavigateToCheckIn
-                    )
-                }
             },
             containerColor = Color.Black
         ) { innerPadding ->

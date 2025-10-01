@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.sp
 fun VisualizacaoDadosScreen(
     onNavigateToCheckIn: () -> Unit = {},
     onNavigateToCarga: () -> Unit = {},
-    onNavigateToRecursosApoio: () -> Unit = {},
+    onNavigateToAlertas: () -> Unit = {},
     onNavigateToAvaliacaoRiscos: () -> Unit = {}
 ) {
     Scaffold(

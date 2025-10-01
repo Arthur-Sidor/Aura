@@ -1,9 +1,9 @@
-package br.com.fiap.aura.ViewModel
+package br.com.fiap.aura.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import br.com.fiap.aura.model.CargaModel
-import br.com.fiap.aura.repository.CargaRepository
+import br.com.fiap.aura.Repository.CargaRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -57,11 +57,7 @@ class CargaViewModel(
         }
     }
 
-    fun limparHistorico() {
-        repository.limparAvaliacoes()
-    }
 
     fun mediaCarga(): String = repository.calcularMediaCarga()
     fun totalAvaliacoes(): Int = repository.totalAvaliacoes()
-    fun ultimaAvaliacao(): CargaModel? = repository.obterUltimaAvaliacao()
 }

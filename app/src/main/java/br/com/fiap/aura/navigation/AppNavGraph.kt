@@ -50,7 +50,8 @@ sealed class Screen(val route: String) {
     object CheckIn : Screen("checkin_screen")
     object VisualizacaoDados : Screen("visualizacao_dados_screen")
     object Carga : Screen("carga_screen")
-    object RecursosApoio : Screen("recursos_apoio_screen")
+    
+    object Alertas : Screen("alertas_screen")
     object AvaliacaoRiscos : Screen("avaliacao_riscos_screen")
 }
 
@@ -142,7 +143,7 @@ fun AppNavGraph(
                 //onLogoutAction = onLogout, // Você precisaria adicionar este parâmetro à CheckInScreen
                 onNavigateToVisualizacaoDados = { navController.navigate(Screen.VisualizacaoDados.route) },
                 onNavigateToCarga = { navController.navigate(Screen.Carga.route) },
-                onNavigateToRecursosApoio = { navController.navigate(Screen.RecursosApoio.route) },
+                onNavigateToAlertas = { navController.navigate(Screen.Alertas.route) },
                 onNavigateToAvaliacaoRiscos = { navController.navigate(Screen.AvaliacaoRiscos.route) }
             )
         }
@@ -152,7 +153,7 @@ fun AppNavGraph(
             VisualizacaoDadosScreen(
                 onNavigateToCheckIn = { navController.navigate(Screen.CheckIn.route) },
                 onNavigateToCarga = { navController.navigate(Screen.Carga.route) },
-                onNavigateToRecursosApoio = { navController.navigate(Screen.RecursosApoio.route) },
+                onNavigateToAlertas = { navController.navigate(Screen.Alertas.route) },
                 onNavigateToAvaliacaoRiscos = { navController.navigate(Screen.AvaliacaoRiscos.route) }
             )
         }
@@ -161,15 +162,14 @@ fun AppNavGraph(
             CargaScreen(
                 onNavigateToCheckIn = { navController.navigate(Screen.CheckIn.route) },
                 onNavigateToVisualizacaoDados = { navController.navigate(Screen.VisualizacaoDados.route) },
-                onNavigateToCarga = { navController.navigate(Screen.Carga.route) },
-                onNavigateToRecursosApoio = { navController.navigate(Screen.RecursosApoio.route) },
+                onNavigateToAlertas = { navController.navigate(Screen.Alertas.route) },
                 onNavigateToAvaliacaoRiscos = { navController.navigate(Screen.AvaliacaoRiscos.route) }
             )
         }
 
 
-        composable(Screen.RecursosApoio.route) {
-            RecursosApoioScreen(
+        composable(Screen.Alertas.route) {
+            AlertasScreen(
                 onNavigateToCheckIn = { navController.navigate(Screen.CheckIn.route) },
                 onNavigateToVisualizacaoDados = { navController.navigate(Screen.VisualizacaoDados.route) },
                 onNavigateToCarga = { navController.navigate(Screen.Carga.route) },
@@ -182,9 +182,8 @@ fun AppNavGraph(
                 onNavigateToCheckIn = { navController.navigate(Screen.CheckIn.route) },
                 onNavigateToVisualizacaoDados = { navController.navigate(Screen.VisualizacaoDados.route) },
                 onNavigateToCarga = { navController.navigate(Screen.Carga.route) },
-                onNavigateToRecursosApoio = { navController.navigate(Screen.RecursosApoio.route) }
+                onNavigateToAlertas = { navController.navigate(Screen.Alertas.route) }
             )
         }
     }
 }
-

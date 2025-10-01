@@ -22,7 +22,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.com.fiap.aura.Menu.SideMenu
-import br.com.fiap.aura.ViewModel.CheckInViewModel
+import br.com.fiap.aura.viewModel.CheckInViewModel
 
 
 import kotlinx.coroutines.launch
@@ -33,7 +33,7 @@ fun CheckInScreen(
     viewModel: CheckInViewModel = CheckInViewModel(),
     onNavigateToVisualizacaoDados: () -> Unit,
     onNavigateToCarga: () -> Unit,
-    onNavigateToRecursosApoio: () -> Unit,
+    onNavigateToAlertas: () -> Unit,
     onNavigateToAvaliacaoRiscos: () -> Unit
 ) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -61,9 +61,9 @@ fun CheckInScreen(
                     coroutineScope.launch { drawerState.close() }
                     onNavigateToCarga()
                 },
-                onNavigateToRecursosApoio = {
+                onNavigateToAlertas = {
                     coroutineScope.launch { drawerState.close() }
-                    onNavigateToRecursosApoio()
+                    onNavigateToAlertas()
                 },
                 onNavigateToAvaliacaoRiscos = {
                     coroutineScope.launch { drawerState.close() }

@@ -17,7 +17,7 @@ fun SideMenu(
     onNavigateToCheckIn: () -> Unit,
     onNavigateToVisualizacaoDados: () -> Unit,
     onNavigateToCarga: () -> Unit,
-    onNavigateToRecursosApoio: () -> Unit,
+    onNavigateToAlertas: () -> Unit,
     onNavigateToAvaliacaoRiscos: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -31,7 +31,7 @@ fun SideMenu(
         MenuItem("Checkin", onNavigateToCheckIn)
         MenuItem("Visualização de Dados", onNavigateToVisualizacaoDados)
         MenuItem("Carga De Trabalho", onNavigateToCarga)
-        MenuItem("Recursos de Apoio", onNavigateToRecursosApoio)
+        MenuItem("Alertas", onNavigateToAlertas)
         MenuItem("Avaliação de Riscos", onNavigateToAvaliacaoRiscos)
     }
 }

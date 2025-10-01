@@ -7,7 +7,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -15,7 +14,8 @@ import androidx.compose.ui.unit.sp
 import br.com.fiap.aura.Components.HistoricoCard
 import br.com.fiap.aura.Components.PerguntaRadio
 import br.com.fiap.aura.Menu.SideMenu
-import br.com.fiap.aura.ViewModel.CargaViewModel
+import br.com.fiap.aura.viewModel.CargaViewModel
+
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -24,8 +24,7 @@ fun CargaScreen(
     viewModel: CargaViewModel = CargaViewModel(),
     onNavigateToCheckIn: () -> Unit,
     onNavigateToVisualizacaoDados: () -> Unit,
-    onNavigateToCarga: () -> Unit,
-    onNavigateToRecursosApoio: () -> Unit,
+    onNavigateToAlertas: () -> Unit,
     onNavigateToAvaliacaoRiscos: () -> Unit
 ) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -45,21 +44,18 @@ fun CargaScreen(
         drawerState = drawerState,
         drawerContent = {
             SideMenu(
-                onNavigateToCheckIn = {
-                    coroutineScope.launch { drawerState.close() }
-                    onNavigateToCheckIn()
-                },
+                onNavigateToCarga = { coroutineScope.launch { drawerState.close() } },
                 onNavigateToVisualizacaoDados = {
                     coroutineScope.launch { drawerState.close() }
                     onNavigateToVisualizacaoDados()
                 },
-                onNavigateToCarga = {
+                onNavigateToCheckIn = {
                     coroutineScope.launch { drawerState.close() }
-                    onNavigateToCarga()
+                    onNavigateToCheckIn()
                 },
-                onNavigateToRecursosApoio = {
+                onNavigateToAlertas = {
                     coroutineScope.launch { drawerState.close() }
-                    onNavigateToRecursosApoio()
+                    onNavigateToAlertas()
                 },
                 onNavigateToAvaliacaoRiscos = {
                     coroutineScope.launch { drawerState.close() }
