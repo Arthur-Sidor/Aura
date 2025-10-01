@@ -1,4 +1,4 @@
-package br.com.fiap.aura.viewModel
+package br.com.fiap.aura.Viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
