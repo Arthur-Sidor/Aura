@@ -12,6 +12,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import br.com.fiap.aura.Screens.*
 
+
 // --- Simulação de Autenticação (coloque isso em um ViewModel/Repository em um app real) ---
 object FakeAuthManager {
     private val registeredUsers = mutableMapOf<String, String>() // email to password
@@ -52,7 +53,7 @@ sealed class Screen(val route: String) {
     object Carga : Screen("carga_screen")
     
     object Alertas : Screen("alertas_screen")
-    object AvaliacaoRiscos : Screen("avaliacao_riscos_screen")
+    object Relacionamentos : Screen("relacionamentos_screen")
 }
 
 @Composable
@@ -144,7 +145,7 @@ fun AppNavGraph(
                 onNavigateToVisualizacaoDados = { navController.navigate(Screen.VisualizacaoDados.route) },
                 onNavigateToCarga = { navController.navigate(Screen.Carga.route) },
                 onNavigateToAlertas = { navController.navigate(Screen.Alertas.route) },
-                onNavigateToAvaliacaoRiscos = { navController.navigate(Screen.AvaliacaoRiscos.route) }
+                onNavigateToRelacionamentos = { navController.navigate(Screen.Relacionamentos.route) }
             )
         }
 
@@ -154,7 +155,7 @@ fun AppNavGraph(
                 onNavigateToCheckIn = { navController.navigate(Screen.CheckIn.route) },
                 onNavigateToCarga = { navController.navigate(Screen.Carga.route) },
                 onNavigateToAlertas = { navController.navigate(Screen.Alertas.route) },
-                onNavigateToAvaliacaoRiscos = { navController.navigate(Screen.AvaliacaoRiscos.route) }
+                onNavigateToRelacionamentos = { navController.navigate(Screen.Relacionamentos.route) }
             )
         }
 
@@ -163,7 +164,7 @@ fun AppNavGraph(
                 onNavigateToCheckIn = { navController.navigate(Screen.CheckIn.route) },
                 onNavigateToVisualizacaoDados = { navController.navigate(Screen.VisualizacaoDados.route) },
                 onNavigateToAlertas = { navController.navigate(Screen.Alertas.route) },
-                onNavigateToAvaliacaoRiscos = { navController.navigate(Screen.AvaliacaoRiscos.route) }
+                onNavigateToRelacionamentos = { navController.navigate(Screen.Relacionamentos.route) }
             )
         }
 
@@ -173,17 +174,19 @@ fun AppNavGraph(
                 onNavigateToCheckIn = { navController.navigate(Screen.CheckIn.route) },
                 onNavigateToVisualizacaoDados = { navController.navigate(Screen.VisualizacaoDados.route) },
                 onNavigateToCarga = { navController.navigate(Screen.Carga.route) },
-                onNavigateToAvaliacaoRiscos = { navController.navigate(Screen.AvaliacaoRiscos.route) }
+                onNavigateToRelacionamentos = { navController.navigate(Screen.Relacionamentos.route) }
             )
-        }
 
-        composable(Screen.AvaliacaoRiscos.route) {
-            AvaliacaoRiscosPsicossociaisScreen(
+        }
+        composable(Screen.Relacionamentos.route) {
+         RelacionamentoScreen (
                 onNavigateToCheckIn = { navController.navigate(Screen.CheckIn.route) },
                 onNavigateToVisualizacaoDados = { navController.navigate(Screen.VisualizacaoDados.route) },
                 onNavigateToCarga = { navController.navigate(Screen.Carga.route) },
                 onNavigateToAlertas = { navController.navigate(Screen.Alertas.route) }
             )
+
         }
+
     }
 }

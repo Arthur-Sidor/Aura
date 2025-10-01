@@ -1,5 +1,7 @@
 package br.com.fiap.aura.Screens
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -7,14 +9,15 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import br.com.fiap.aura.Components.PerguntaRadio
 import br.com.fiap.aura.Menu.SideMenu
-import br.com.fiap.aura.viewmodel.AlertasViewModel
+import br.com.fiap.aura.Viewmodel.AlertasViewModel
+import br.com.fiap.aura.Components.PerguntaRadio
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -24,7 +27,7 @@ fun AlertasScreen(
     onNavigateToCheckIn: () -> Unit = {},
     onNavigateToVisualizacaoDados: () -> Unit = {},
     onNavigateToCarga: () -> Unit = {},
-    onNavigateToAvaliacaoRiscos: () -> Unit = {}
+    onNavigateToRelacionamentos: () -> Unit = {}
 ) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val coroutineScope = rememberCoroutineScope()
@@ -42,22 +45,10 @@ fun AlertasScreen(
         drawerContent = {
             SideMenu(
                 onNavigateToAlertas = { coroutineScope.launch { drawerState.close() } },
-                onNavigateToVisualizacaoDados = {
-                    coroutineScope.launch { drawerState.close() }
-                    onNavigateToVisualizacaoDados()
-                },
-                onNavigateToCheckIn = {
-                    coroutineScope.launch { drawerState.close() }
-                    onNavigateToCheckIn()
-                },
-                onNavigateToCarga = {
-                    coroutineScope.launch { drawerState.close() }
-                    onNavigateToCarga()
-                },
-                onNavigateToAvaliacaoRiscos = {
-                    coroutineScope.launch { drawerState.close() }
-                    onNavigateToAvaliacaoRiscos()
-                }
+                onNavigateToVisualizacaoDados = { coroutineScope.launch { drawerState.close() }; onNavigateToVisualizacaoDados() },
+                onNavigateToCheckIn = { coroutineScope.launch { drawerState.close() }; onNavigateToCheckIn() },
+                onNavigateToCarga = { coroutineScope.launch { drawerState.close() }; onNavigateToCarga() },
+                onNavigateToRelacionamentos = { coroutineScope.launch { drawerState.close() }; onNavigateToRelacionamentos() }
             )
         }
     ) {
@@ -80,28 +71,36 @@ fun AlertasScreen(
                 modifier = Modifier
                     .padding(innerPadding)
                     .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
-                    .padding(16.dp),
+                    .background(Color.Black)
+                    .padding(16.dp)
+                    .verticalScroll(rememberScrollState()),
                 verticalArrangement = Arrangement.spacedBy(24.dp)
             ) {
 
                 Text("Avaliação Atual", fontSize = 18.sp, color = Color.White)
 
                 perguntas.forEach { pergunta ->
-                    val resposta = respostasSelecionadas.find { it.pergunta == pergunta }?.resposta ?: ""
-                    PerguntaRadio(
-                        titulo = pergunta,
-                        opcoes = listOf("Nunca", "Raramente", "Às vezes", "Frequentemente", "Sempre"),
-                        selecionado = resposta,
-                        onSelecionar = { viewModel.atualizarResposta(pergunta, it) }
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = CardDefaults.cardColors(containerColor = Color(0xFF1C1C1C)),
+                        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+                    ) {
+                        Column(modifier = Modifier.padding(16.dp)) {
+                            val resposta = respostasSelecionadas.find { it.pergunta == pergunta }?.resposta ?: ""
+                            PerguntaRadio(
+                                titulo = pergunta,
+                                opcoes = listOf("Nunca", "Raramente", "Às vezes", "Frequentemente", "Sempre"),
+                                selecionado = resposta,
+                                onSelecionar = { viewModel.atualizarResposta(pergunta, it) }
+                            )
+                        }
+                    }
                 }
 
                 Button(
                     onClick = { viewModel.finalizarAvaliação() },
                     modifier = Modifier.fillMaxWidth(),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF2E7D32))
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF56A8C2))
                 ) {
                     Text("Finalizar", color = Color.White)
                 }
@@ -117,11 +116,20 @@ fun AlertasScreen(
                         val media = viewModel.calcularMedia(aval)
                         val nivel = viewModel.nivelRisco(media)
 
-                        Text("Avaliação ${index + 1}:", color = Color.White)
-                        aval.forEach { pr ->
-                            Text("${pr.pergunta} → ${pr.resposta}", color = Color.Gray)
+                        Card(
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = CardDefaults.cardColors(containerColor = Color(0xFF1C1C1C)),
+                            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+                        ) {
+                            Column(modifier = Modifier.padding(16.dp)) {
+                                Text("Avaliação ${index + 1}:", color = Color.White)
+                                aval.forEach { pr ->
+                                    Text("${pr.pergunta} → ${pr.resposta}", color = Color.Gray)
+                                }
+                                Text("Média: %.1f | Nível de Risco: $nivel".format(media), color = Color.White)
+                            }
                         }
-                        Text("Média: %.1f | Nível de Risco: $nivel".format(media), color = Color.White)
+
                         Spacer(modifier = Modifier.height(8.dp))
                     }
                 }

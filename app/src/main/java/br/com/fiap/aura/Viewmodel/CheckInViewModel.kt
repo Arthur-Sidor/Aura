@@ -1,4 +1,4 @@
-package br.com.fiap.aura.viewModel
+package br.com.fiap.aura.Viewmodel
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf

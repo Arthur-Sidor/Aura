@@ -18,7 +18,7 @@ fun SideMenu(
     onNavigateToVisualizacaoDados: () -> Unit,
     onNavigateToCarga: () -> Unit,
     onNavigateToAlertas: () -> Unit,
-    onNavigateToAvaliacaoRiscos: () -> Unit,
+    onNavigateToRelacionamentos: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -32,7 +32,7 @@ fun SideMenu(
         MenuItem("Visualização de Dados", onNavigateToVisualizacaoDados)
         MenuItem("Carga De Trabalho", onNavigateToCarga)
         MenuItem("Alertas", onNavigateToAlertas)
-        MenuItem("Avaliação de Riscos", onNavigateToAvaliacaoRiscos)
+        MenuItem("Relacionamentos", onNavigateToRelacionamentos)
     }
 }
 

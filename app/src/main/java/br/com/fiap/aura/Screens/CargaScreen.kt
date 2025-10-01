@@ -1,5 +1,6 @@
 package br.com.fiap.aura.Screens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -14,8 +15,7 @@ import androidx.compose.ui.unit.sp
 import br.com.fiap.aura.Components.HistoricoCard
 import br.com.fiap.aura.Components.PerguntaRadio
 import br.com.fiap.aura.Menu.SideMenu
-import br.com.fiap.aura.viewModel.CargaViewModel
-
+import br.com.fiap.aura.Viewmodel.CargaViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -25,7 +25,7 @@ fun CargaScreen(
     onNavigateToCheckIn: () -> Unit,
     onNavigateToVisualizacaoDados: () -> Unit,
     onNavigateToAlertas: () -> Unit,
-    onNavigateToAvaliacaoRiscos: () -> Unit
+    onNavigateToRelacionamentos: () -> Unit
 ) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val coroutineScope = rememberCoroutineScope()
@@ -57,9 +57,9 @@ fun CargaScreen(
                     coroutineScope.launch { drawerState.close() }
                     onNavigateToAlertas()
                 },
-                onNavigateToAvaliacaoRiscos = {
+                onNavigateToRelacionamentos = {
                     coroutineScope.launch { drawerState.close() }
-                    onNavigateToAvaliacaoRiscos()
+                    onNavigateToRelacionamentos()
                 }
             )
         }
@@ -82,6 +82,7 @@ fun CargaScreen(
                 modifier = Modifier
                     .padding(innerPadding)
                     .fillMaxSize()
+                    .background(Color.Black)
                     .padding(16.dp)
                     .verticalScroll(rememberScrollState())
             ) {
@@ -90,32 +91,56 @@ fun CargaScreen(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 // Pergunta 1
-                PerguntaRadio(
-                    titulo = "Como você avalia sua carga de trabalho?",
-                    opcoes = listOf("Muito Leve", "Leve", "Média", "Alta", "Muito Alta"),
-                    selecionado = cargaSelecionada,
-                    onSelecionar = { viewModel.atualizarCarga(it) }
-                )
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = CardDefaults.cardColors(containerColor = Color(0xFF1C1C1C)),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+                ) {
+                    Column(modifier = Modifier.padding(16.dp)) {
+                        PerguntaRadio(
+                            titulo = "Como você avalia sua carga de trabalho?",
+                            opcoes = listOf("Muito Leve", "Leve", "Média", "Alta", "Muito Alta"),
+                            selecionado = cargaSelecionada,
+                            onSelecionar = { viewModel.atualizarCarga(it) }
+                        )
+                    }
+                }
 
                 Spacer(modifier = Modifier.height(16.dp))
 
                 // Pergunta 2
-                PerguntaRadio(
-                    titulo = "Sua carga de trabalho afeta sua qualidade de vida?",
-                    opcoes = listOf("Não", "Raramente", "Às vezes", "Frequentemente", "Sempre"),
-                    selecionado = impactoSelecionado,
-                    onSelecionar = { viewModel.atualizarImpacto(it) }
-                )
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = CardDefaults.cardColors(containerColor = Color(0xFF1C1C1C)),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+                ) {
+                    Column(modifier = Modifier.padding(16.dp)) {
+                        PerguntaRadio(
+                            titulo = "Sua carga de trabalho afeta sua qualidade de vida?",
+                            opcoes = listOf("Não", "Raramente", "Às vezes", "Frequentemente", "Sempre"),
+                            selecionado = impactoSelecionado,
+                            onSelecionar = { viewModel.atualizarImpacto(it) }
+                        )
+                    }
+                }
 
                 Spacer(modifier = Modifier.height(16.dp))
 
                 // Pergunta 3
-                PerguntaRadio(
-                    titulo = "Você trabalha além do seu horário regular?",
-                    opcoes = listOf("Não", "Raramente", "Às vezes", "Frequentemente", "Sempre"),
-                    selecionado = horasExtrasSelecionada,
-                    onSelecionar = { viewModel.atualizarHorasExtras(it) }
-                )
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = CardDefaults.cardColors(containerColor = Color(0xFF1C1C1C)),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+                ) {
+                    Column(modifier = Modifier.padding(16.dp)) {
+                        PerguntaRadio(
+                            titulo = "Você trabalha além do seu horário regular?",
+                            opcoes = listOf("Não", "Raramente", "Às vezes", "Frequentemente", "Sempre"),
+                            selecionado = horasExtrasSelecionada,
+                            onSelecionar = { viewModel.atualizarHorasExtras(it) }
+                        )
+                    }
+                }
 
                 Spacer(modifier = Modifier.height(24.dp))
 
@@ -143,7 +168,6 @@ fun CargaScreen(
                         totalAvaliacoes = viewModel.totalAvaliacoes(),
                         mediaCarga = viewModel.mediaCarga()
                     )
-
                     Spacer(modifier = Modifier.height(8.dp))
                 }
             }

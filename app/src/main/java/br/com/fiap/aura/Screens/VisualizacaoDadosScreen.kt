@@ -20,7 +20,7 @@ fun VisualizacaoDadosScreen(
     onNavigateToCheckIn: () -> Unit = {},
     onNavigateToCarga: () -> Unit = {},
     onNavigateToAlertas: () -> Unit = {},
-    onNavigateToAvaliacaoRiscos: () -> Unit = {}
+    onNavigateToRelacionamentos: () -> Unit = {}
 ) {
     Scaffold(
         topBar = {
@@ -55,10 +55,10 @@ fun VisualizacaoDadosScreen(
                     onClick = onNavigateToCarga
                 )
                 NavigationBarItem(
-                    icon = { Icon(Icons.Default.Warning, contentDescription = "Riscos") },
-                    label = { Text("Riscos", color = Color.White) },
+                    icon = { Icon(Icons.Default.Warning, contentDescription = "Relacionamentos") },
+                    label = { Text("Relacionamentos", color = Color.White) },
                     selected = false,
-                    onClick = onNavigateToAvaliacaoRiscos
+                    onClick = onNavigateToRelacionamentos
                 )
             }
         },
