@@ -6,7 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.material3.Surface
 
 import androidx.compose.ui.graphics.Color
-import br.com.fiap.aura.Screens.AvaliacaoRiscosPsicossociaisScreen
+import br.com.fiap.aura.screens.AvaliacaoRiscosPsicossociaisScreen
 import br.com.fiap.aura.ui.theme.AuraTheme
 
 class AvaliacaoRiscosTESTE : ComponentActivity() {

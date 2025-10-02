@@ -1,4 +1,3 @@
-
 package br.com.fiap.aura.Menu
 
 import androidx.compose.foundation.background
@@ -15,8 +14,9 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun SideMenu(
     onNavigateToCheckIn: () -> Unit,
-    onNavigateToVisualizacaoDados: () -> Unit,
+    onNavigateToComunicacao: () -> Unit,
     onNavigateToCarga: () -> Unit,
+    onNavigateToLideranca: () -> Unit,
     onNavigateToAlertas: () -> Unit,
     onNavigateToRelacionamentos: () -> Unit,
     modifier: Modifier = Modifier
@@ -28,9 +28,10 @@ fun SideMenu(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        MenuItem("Checkin", onNavigateToCheckIn)
-        MenuItem("Visualização de Dados", onNavigateToVisualizacaoDados)
-        MenuItem("Carga De Trabalho", onNavigateToCarga)
+        MenuItem("Check-in", onNavigateToCheckIn)
+        MenuItem("Comunicação", onNavigateToComunicacao)
+        MenuItem("Carga de Trabalho", onNavigateToCarga)
+        MenuItem("Liderança", onNavigateToLideranca)
         MenuItem("Alertas", onNavigateToAlertas)
         MenuItem("Relacionamentos", onNavigateToRelacionamentos)
     }

@@ -3,10 +3,8 @@ package br.com.fiap.aura.Viewmodel
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import br.com.fiap.aura.model.RelacionamentosModel
 import br.com.fiap.aura.model.ResponseRelacionamentosModel
-import kotlinx.coroutines.launch
 
 class RelacionamentosViewModel : ViewModel() {
 

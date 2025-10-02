@@ -31,10 +31,11 @@ import kotlinx.coroutines.launch
 @Composable
 fun CheckInScreen(
     viewModel: CheckInViewModel = CheckInViewModel(),
-    onNavigateToVisualizacaoDados: () -> Unit,
+    onNavigateToComunicacao: () -> Unit,
     onNavigateToCarga: () -> Unit,
     onNavigateToAlertas: () -> Unit,
-    onNavigateToRelacionamentos: () -> Unit
+    onNavigateToRelacionamentos: () -> Unit,
+    onNavigateToLideranca: () -> Unit
 ) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val coroutineScope = rememberCoroutineScope()
@@ -53,9 +54,9 @@ fun CheckInScreen(
         drawerContent = {
             SideMenu(
                 onNavigateToCheckIn = { coroutineScope.launch { drawerState.close() } },
-                onNavigateToVisualizacaoDados = {
+                onNavigateToComunicacao = {
                     coroutineScope.launch { drawerState.close() }
-                    onNavigateToVisualizacaoDados()
+                    onNavigateToComunicacao()
                 },
                 onNavigateToCarga = {
                     coroutineScope.launch { drawerState.close() }
@@ -68,6 +69,10 @@ fun CheckInScreen(
                 onNavigateToRelacionamentos = {
                     coroutineScope.launch { drawerState.close() }
                     onNavigateToRelacionamentos()
+                },
+                onNavigateToLideranca = {
+                    coroutineScope.launch { drawerState.close() }
+                    onNavigateToLideranca()
                 }
             )
         }

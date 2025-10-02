@@ -1,4 +1,3 @@
-
 package br.com.fiap.aura.navigation
 
 import CheckInScreen
@@ -10,7 +9,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import br.com.fiap.aura.Screens.*
+import br.com.fiap.aura.screens.*
+import br.com.fiap.aura.Viewmodel.*
 
 
 // --- Simulação de Autenticação (coloque isso em um ViewModel/Repository em um app real) ---
@@ -49,9 +49,11 @@ sealed class Screen(val route: String) {
     object Login : Screen("login_screen")
     object SignUp : Screen("signup_screen")
     object CheckIn : Screen("checkin_screen")
-    object VisualizacaoDados : Screen("visualizacao_dados_screen")
+    object Comunicacao : Screen("visualizacao_dados_screen")
     object Carga : Screen("carga_screen")
-    
+    object Lideranca : Screen("lideranca_screen")
+
+
     object Alertas : Screen("alertas_screen")
     object Relacionamentos : Screen("relacionamentos_screen")
 }
@@ -72,26 +74,27 @@ fun AppNavGraph(
                 onStartClick = { navController.navigate(Screen.Entry.route) }
             )
         }
-
         composable(Screen.Entry.route) {
             EntryScreen(
                 onNavigateToLogin = { navController.navigate(Screen.Login.route) },
                 onNavigateToRegister = { navController.navigate(Screen.SignUp.route) }
             )
         }
-
         composable(Screen.Login.route) {
             LoginScreen(
                 onLoginClick = { email, senha ->
                     if (FakeAuthManager.loginUser(email, senha)) {
                         // Login bem-sucedido
                         navController.navigate(Screen.CheckIn.route) {
-                            popUpTo(Screen.Welcome.route) { inclusive = true } // Limpa toda a pilha até Welcome
+                            popUpTo(Screen.Welcome.route) {
+                                inclusive = true
+                            } // Limpa toda a pilha até Welcome
                             launchSingleTop = true
                         }
                     } else {
                         // Login falhou
-                        Toast.makeText(context, "Email ou senha inválidos.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Email ou senha inválidos.", Toast.LENGTH_SHORT)
+                            .show()
                         // Não redireciona, permite nova tentativa ou ir para cadastro
                     }
                 },
@@ -101,25 +104,35 @@ fun AppNavGraph(
                 onNavigateBack = { navController.popBackStack() }
             )
         }
-
         composable(Screen.SignUp.route) {
             SignUpScreen(
                 onRegisterClick = { nome, email, cpf, senha ->
                     if (email.isBlank() || senha.isBlank() || nome.isBlank() || cpf.isBlank()) {
-                        Toast.makeText(context, "Preencha todos os campos.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Preencha todos os campos.", Toast.LENGTH_SHORT)
+                            .show()
                         return@SignUpScreen
                     }
                     if (FakeAuthManager.isUserRegistered(email)) {
-                        Toast.makeText(context, "Este email já está cadastrado.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            context,
+                            "Este email já está cadastrado.",
+                            Toast.LENGTH_SHORT
+                        ).show()
                         return@SignUpScreen
                     }
 
                     if (FakeAuthManager.registerUser(email, senha)) {
                         // Cadastro e login automático simulado
                         FakeAuthManager.loginUser(email, senha) // Loga o usuário recém-cadastrado
-                        Toast.makeText(context, "Cadastro realizado com sucesso!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            context,
+                            "Cadastro realizado com sucesso!",
+                            Toast.LENGTH_SHORT
+                        ).show()
                         navController.navigate(Screen.CheckIn.route) {
-                            popUpTo(Screen.Welcome.route) { inclusive = true } // Limpa toda a pilha até Welcome
+                            popUpTo(Screen.Welcome.route) {
+                                inclusive = true
+                            } // Limpa toda a pilha até Welcome
                             launchSingleTop = true
                         }
                     } else {
@@ -130,7 +143,6 @@ fun AppNavGraph(
                 onNavigateBack = { navController.popBackStack() }
             )
         }
-
         composable(Screen.CheckIn.route) {
             // Adicionar um "logout" simulado para testar
             val onLogout = {
@@ -142,51 +154,63 @@ fun AppNavGraph(
             }
             CheckInScreen(
                 //onLogoutAction = onLogout, // Você precisaria adicionar este parâmetro à CheckInScreen
-                onNavigateToVisualizacaoDados = { navController.navigate(Screen.VisualizacaoDados.route) },
+                onNavigateToComunicacao = { navController.navigate(Screen.Comunicacao.route) },
                 onNavigateToCarga = { navController.navigate(Screen.Carga.route) },
                 onNavigateToAlertas = { navController.navigate(Screen.Alertas.route) },
-                onNavigateToRelacionamentos = { navController.navigate(Screen.Relacionamentos.route) }
+                onNavigateToRelacionamentos = { navController.navigate(Screen.Relacionamentos.route) },
+                onNavigateToLideranca = { navController.navigate(Screen.Lideranca.route) }
             )
         }
-
-        // ... Outras rotas (VisualizacaoDados, Carga, etc.) permanecem as mesmas
-        composable(Screen.VisualizacaoDados.route) {
-            VisualizacaoDadosScreen(
+        composable(Screen.Comunicacao.route) {
+            ComunicacaoScreen(
                 onNavigateToCheckIn = { navController.navigate(Screen.CheckIn.route) },
                 onNavigateToCarga = { navController.navigate(Screen.Carga.route) },
                 onNavigateToAlertas = { navController.navigate(Screen.Alertas.route) },
-                onNavigateToRelacionamentos = { navController.navigate(Screen.Relacionamentos.route) }
+                onNavigateToRelacionamentos = { navController.navigate(Screen.Relacionamentos.route) },
+                onNavigateToLideranca = { navController.navigate(Screen.Lideranca.route) }
             )
         }
-
         composable(Screen.Carga.route) {
             CargaScreen(
                 onNavigateToCheckIn = { navController.navigate(Screen.CheckIn.route) },
-                onNavigateToVisualizacaoDados = { navController.navigate(Screen.VisualizacaoDados.route) },
+                onNavigateToComunicacao = { navController.navigate(Screen.Comunicacao.route) },
                 onNavigateToAlertas = { navController.navigate(Screen.Alertas.route) },
-                onNavigateToRelacionamentos = { navController.navigate(Screen.Relacionamentos.route) }
+                onNavigateToRelacionamentos = { navController.navigate(Screen.Relacionamentos.route) },
+                onNavigateToLideranca = { navController.navigate(Screen.Lideranca.route) }
             )
         }
-
-
         composable(Screen.Alertas.route) {
             AlertasScreen(
                 onNavigateToCheckIn = { navController.navigate(Screen.CheckIn.route) },
-                onNavigateToVisualizacaoDados = { navController.navigate(Screen.VisualizacaoDados.route) },
+                onNavigateToComunicacao = { navController.navigate(Screen.Comunicacao.route) },
                 onNavigateToCarga = { navController.navigate(Screen.Carga.route) },
-                onNavigateToRelacionamentos = { navController.navigate(Screen.Relacionamentos.route) }
+                onNavigateToRelacionamentos = { navController.navigate(Screen.Relacionamentos.route) },
+                onNavigateToLideranca = { navController.navigate(Screen.Lideranca.route) }
             )
 
         }
         composable(Screen.Relacionamentos.route) {
-         RelacionamentoScreen (
+            RelacionamentoScreen(
                 onNavigateToCheckIn = { navController.navigate(Screen.CheckIn.route) },
-                onNavigateToVisualizacaoDados = { navController.navigate(Screen.VisualizacaoDados.route) },
+                onNavigateToComunicacao = { navController.navigate(Screen.Comunicacao.route) },
                 onNavigateToCarga = { navController.navigate(Screen.Carga.route) },
-                onNavigateToAlertas = { navController.navigate(Screen.Alertas.route) }
+                onNavigateToAlertas = { navController.navigate(Screen.Alertas.route) },
+                onNavigateToLideranca = { navController.navigate(Screen.Lideranca.route) }
             )
 
         }
+
+        composable(Screen.Lideranca.route) {
+            LiderancaScreen(
+                onNavigateToCheckIn = { navController.navigate(Screen.CheckIn.route) },
+                onNavigateToComunicacao = { navController.navigate(Screen.Comunicacao.route) },
+                onNavigateToCarga = { navController.navigate(Screen.Carga.route) },
+                onNavigateToAlertas = { navController.navigate(Screen.Alertas.route) },
+                onNavigateToLideranca = { navController.navigate(Screen.Lideranca.route) },
+                onNavigateToRelacionamentos = { navController.navigate(Screen.Relacionamentos.route) },)
+
+        }
+
 
     }
 }

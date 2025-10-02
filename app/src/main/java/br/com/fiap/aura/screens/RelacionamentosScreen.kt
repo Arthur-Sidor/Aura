@@ -1,4 +1,4 @@
-package br.com.fiap.aura.Screens
+package br.com.fiap.aura.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -25,9 +25,10 @@ import kotlinx.coroutines.launch
 fun RelacionamentoScreen(
     viewModel: RelacionamentosViewModel = RelacionamentosViewModel(),
     onNavigateToCheckIn: () -> Unit,
-    onNavigateToVisualizacaoDados: () -> Unit,
+    onNavigateToComunicacao: () -> Unit,
     onNavigateToAlertas: () -> Unit,
-    onNavigateToCarga: () -> Unit
+    onNavigateToCarga: () -> Unit,
+    onNavigateToLideranca: () -> Unit
 ) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val coroutineScope = rememberCoroutineScope()
@@ -47,10 +48,11 @@ fun RelacionamentoScreen(
         drawerContent = {
             SideMenu(
                 onNavigateToRelacionamentos = { coroutineScope.launch { drawerState.close() } },
-                onNavigateToVisualizacaoDados = { coroutineScope.launch { drawerState.close() }; onNavigateToVisualizacaoDados() },
+                onNavigateToComunicacao = { coroutineScope.launch { drawerState.close() }; onNavigateToComunicacao() },
                 onNavigateToCarga = { coroutineScope.launch { drawerState.close() }; onNavigateToCarga() },
                 onNavigateToAlertas = { coroutineScope.launch { drawerState.close() }; onNavigateToAlertas() },
-                onNavigateToCheckIn = { coroutineScope.launch { drawerState.close() }; onNavigateToCheckIn() }
+                onNavigateToCheckIn = { coroutineScope.launch { drawerState.close() }; onNavigateToCheckIn() },
+                onNavigateToLideranca = { coroutineScope.launch { drawerState.close() }; onNavigateToLideranca() }
             )
         }
     ) {

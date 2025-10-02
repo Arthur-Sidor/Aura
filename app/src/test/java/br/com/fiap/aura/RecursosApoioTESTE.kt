@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import br.com.fiap.aura.Screens.RecursosApoioScreen
+import br.com.fiap.aura.screens.RecursosApoioScreen
 import br.com.fiap.aura.ui.theme.AuraTheme
 
 class RecursosApoioTESTE : ComponentActivity() {

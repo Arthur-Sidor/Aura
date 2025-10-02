@@ -1,4 +1,4 @@
-package br.com.fiap.aura.Screens
+package br.com.fiap.aura.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

@@ -1,4 +1,4 @@
-package br.com.fiap.aura.Screens
+package br.com.fiap.aura.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -23,9 +23,10 @@ import kotlinx.coroutines.launch
 fun CargaScreen(
     viewModel: CargaViewModel = CargaViewModel(),
     onNavigateToCheckIn: () -> Unit,
-    onNavigateToVisualizacaoDados: () -> Unit,
+    onNavigateToComunicacao: () -> Unit,
     onNavigateToAlertas: () -> Unit,
-    onNavigateToRelacionamentos: () -> Unit
+    onNavigateToRelacionamentos: () -> Unit,
+    onNavigateToLideranca: () -> Unit
 ) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val coroutineScope = rememberCoroutineScope()
@@ -45,9 +46,9 @@ fun CargaScreen(
         drawerContent = {
             SideMenu(
                 onNavigateToCarga = { coroutineScope.launch { drawerState.close() } },
-                onNavigateToVisualizacaoDados = {
+                onNavigateToComunicacao = {
                     coroutineScope.launch { drawerState.close() }
-                    onNavigateToVisualizacaoDados()
+                    onNavigateToComunicacao()
                 },
                 onNavigateToCheckIn = {
                     coroutineScope.launch { drawerState.close() }
@@ -60,6 +61,10 @@ fun CargaScreen(
                 onNavigateToRelacionamentos = {
                     coroutineScope.launch { drawerState.close() }
                     onNavigateToRelacionamentos()
+                },
+                onNavigateToLideranca = {
+                    coroutineScope.launch { drawerState.close() }
+                    onNavigateToLideranca()
                 }
             )
         }

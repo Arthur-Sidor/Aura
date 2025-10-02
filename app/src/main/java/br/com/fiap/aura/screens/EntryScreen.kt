@@ -1,4 +1,4 @@
-package br.com.fiap.aura.Screens // Certifique-se que o package está correto
+package br.com.fiap.aura.screens // Certifique-se que o package está correto
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

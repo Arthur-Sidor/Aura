@@ -1,6 +1,6 @@
 package br.com.fiap.aura
 
-import br.com.fiap.aura.Screens.BemEstarScreen
+import br.com.fiap.aura.screens.BemEstarScreen
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
