@@ -1,6 +1,6 @@
-package br.com.fiap.aura.Repository
+package br.com.fiap.aura.repository
 
-import br.com.fiap.aura.ApiMock.AlertasApi
+import br.com.fiap.aura.api.AlertasApi
 import br.com.fiap.aura.model.AlertasModel
 
 import retrofit2.Retrofit

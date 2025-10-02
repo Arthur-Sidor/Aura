@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.com.fiap.aura.Menu.SideMenu
 import br.com.fiap.aura.Components.PerguntaRadio
-import br.com.fiap.aura.Viewmodel.LiderancaViewModel
+import br.com.fiap.aura.viewmodel.LiderancaViewModel
 import kotlinx.coroutines.launch
 import java.util.Locale
 

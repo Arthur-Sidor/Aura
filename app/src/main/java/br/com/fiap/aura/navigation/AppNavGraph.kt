@@ -1,47 +1,19 @@
 package br.com.fiap.aura.navigation
 
 import CheckInScreen
+
 import android.widget.Toast
 import androidx.compose.runtime.Composable
-
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import br.com.fiap.aura.screens.*
-import br.com.fiap.aura.Viewmodel.*
+import br.com.fiap.aura.viewmodel.AuthViewModel
 
-
-// --- Simulação de Autenticação (coloque isso em um ViewModel/Repository em um app real) ---
-object FakeAuthManager {
-    private val registeredUsers = mutableMapOf<String, String>() // email to password
-    var loggedInUserEmail: String? = null
-        private set
-
-    fun isUserRegistered(email: String): Boolean = registeredUsers.containsKey(email)
-
-    fun registerUser(email: String, pass: String): Boolean {
-        if (isUserRegistered(email)) {
-            return false // Usuário já existe
-        }
-        registeredUsers[email] = pass
-        return true
-    }
-
-    fun loginUser(email: String, pass: String): Boolean {
-        val isLoginSuccessful = registeredUsers[email] == pass
-        if (isLoginSuccessful) {
-            loggedInUserEmail = email
-        }
-        return isLoginSuccessful
-    }
-
-    fun logoutUser() {
-        loggedInUserEmail = null
-    }
-}
-// --- Fim da Simulação de Autenticação ---
 
 sealed class Screen(val route: String) {
     object Welcome : Screen("welcome_screen")
@@ -52,108 +24,71 @@ sealed class Screen(val route: String) {
     object Comunicacao : Screen("visualizacao_dados_screen")
     object Carga : Screen("carga_screen")
     object Lideranca : Screen("lideranca_screen")
-
-
     object Alertas : Screen("alertas_screen")
     object Relacionamentos : Screen("relacionamentos_screen")
 }
 
 @Composable
 fun AppNavGraph(
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
+    authViewModel: AuthViewModel = viewModel()
 ) {
-    val context = LocalContext.current // Para Toasts
+    val context = LocalContext.current
+    val loggedIn = authViewModel.loginResult.collectAsState().value?.startsWith("ey") ?: false
 
     NavHost(
         navController = navController,
-        startDestination = if (FakeAuthManager.loggedInUserEmail != null) Screen.CheckIn.route else Screen.Welcome.route
-        // Se já estiver logado (ex: app reiniciado), vai direto para CheckIn
+        startDestination = if (loggedIn) Screen.CheckIn.route else Screen.Welcome.route
     ) {
+        // --- Welcome ---
         composable(Screen.Welcome.route) {
             WelcomeScreen(
                 onStartClick = { navController.navigate(Screen.Entry.route) }
             )
         }
+
+        // --- Entry ---
         composable(Screen.Entry.route) {
             EntryScreen(
                 onNavigateToLogin = { navController.navigate(Screen.Login.route) },
                 onNavigateToRegister = { navController.navigate(Screen.SignUp.route) }
             )
         }
+
+        // --- Login ---
         composable(Screen.Login.route) {
             LoginScreen(
-                onLoginClick = { email, senha ->
-                    if (FakeAuthManager.loginUser(email, senha)) {
-                        // Login bem-sucedido
-                        navController.navigate(Screen.CheckIn.route) {
-                            popUpTo(Screen.Welcome.route) {
-                                inclusive = true
-                            } // Limpa toda a pilha até Welcome
-                            launchSingleTop = true
-                        }
-                    } else {
-                        // Login falhou
-                        Toast.makeText(context, "Email ou senha inválidos.", Toast.LENGTH_SHORT)
-                            .show()
-                        // Não redireciona, permite nova tentativa ou ir para cadastro
+                viewModel = authViewModel,
+                onLoginSuccess = { token ->
+                    Toast.makeText(context, "Login realizado!", Toast.LENGTH_SHORT).show()
+                    navController.navigate(Screen.CheckIn.route) {
+                        popUpTo(Screen.Welcome.route) { inclusive = true }
+                        launchSingleTop = true
                     }
                 },
-                onNavigateToRegister = {
-                    navController.navigate(Screen.SignUp.route)
-                },
-                onNavigateBack = { navController.popBackStack() }
+                onNavigateToRegister = { navController.navigate(Screen.SignUp.route) },
+
             )
         }
+
+        // --- SignUp ---
         composable(Screen.SignUp.route) {
             SignUpScreen(
-                onRegisterClick = { nome, email, cpf, senha ->
-                    if (email.isBlank() || senha.isBlank() || nome.isBlank() || cpf.isBlank()) {
-                        Toast.makeText(context, "Preencha todos os campos.", Toast.LENGTH_SHORT)
-                            .show()
-                        return@SignUpScreen
-                    }
-                    if (FakeAuthManager.isUserRegistered(email)) {
-                        Toast.makeText(
-                            context,
-                            "Este email já está cadastrado.",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        return@SignUpScreen
-                    }
-
-                    if (FakeAuthManager.registerUser(email, senha)) {
-                        // Cadastro e login automático simulado
-                        FakeAuthManager.loginUser(email, senha) // Loga o usuário recém-cadastrado
-                        Toast.makeText(
-                            context,
-                            "Cadastro realizado com sucesso!",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        navController.navigate(Screen.CheckIn.route) {
-                            popUpTo(Screen.Welcome.route) {
-                                inclusive = true
-                            } // Limpa toda a pilha até Welcome
-                            launchSingleTop = true
-                        }
-                    } else {
-                        // Isso não deveria acontecer se a checagem isUserRegistered foi feita
-                        Toast.makeText(context, "Falha no cadastro.", Toast.LENGTH_SHORT).show()
+                viewModel = authViewModel,
+                onRegisterSuccess = { token ->
+                    Toast.makeText(context, "Cadastro realizado!", Toast.LENGTH_SHORT).show()
+                    navController.navigate(Screen.CheckIn.route) {
+                        popUpTo(Screen.Welcome.route) { inclusive = true }
+                        launchSingleTop = true
                     }
                 },
                 onNavigateBack = { navController.popBackStack() }
             )
         }
+
+        // --- CheckIn ---
         composable(Screen.CheckIn.route) {
-            // Adicionar um "logout" simulado para testar
-            val onLogout = {
-                FakeAuthManager.logoutUser()
-                navController.navigate(Screen.Entry.route) {
-                    popUpTo(Screen.CheckIn.route) { inclusive = true }
-                    launchSingleTop = true
-                }
-            }
             CheckInScreen(
-                //onLogoutAction = onLogout, // Você precisaria adicionar este parâmetro à CheckInScreen
                 onNavigateToComunicacao = { navController.navigate(Screen.Comunicacao.route) },
                 onNavigateToCarga = { navController.navigate(Screen.Carga.route) },
                 onNavigateToAlertas = { navController.navigate(Screen.Alertas.route) },
@@ -161,6 +96,8 @@ fun AppNavGraph(
                 onNavigateToLideranca = { navController.navigate(Screen.Lideranca.route) }
             )
         }
+
+        // --- Comunicacao ---
         composable(Screen.Comunicacao.route) {
             ComunicacaoScreen(
                 onNavigateToCheckIn = { navController.navigate(Screen.CheckIn.route) },
@@ -170,6 +107,8 @@ fun AppNavGraph(
                 onNavigateToLideranca = { navController.navigate(Screen.Lideranca.route) }
             )
         }
+
+        // --- Carga ---
         composable(Screen.Carga.route) {
             CargaScreen(
                 onNavigateToCheckIn = { navController.navigate(Screen.CheckIn.route) },
@@ -179,6 +118,8 @@ fun AppNavGraph(
                 onNavigateToLideranca = { navController.navigate(Screen.Lideranca.route) }
             )
         }
+
+        // --- Alertas ---
         composable(Screen.Alertas.route) {
             AlertasScreen(
                 onNavigateToCheckIn = { navController.navigate(Screen.CheckIn.route) },
@@ -187,8 +128,9 @@ fun AppNavGraph(
                 onNavigateToRelacionamentos = { navController.navigate(Screen.Relacionamentos.route) },
                 onNavigateToLideranca = { navController.navigate(Screen.Lideranca.route) }
             )
-
         }
+
+        // --- Relacionamentos ---
         composable(Screen.Relacionamentos.route) {
             RelacionamentoScreen(
                 onNavigateToCheckIn = { navController.navigate(Screen.CheckIn.route) },
@@ -197,20 +139,20 @@ fun AppNavGraph(
                 onNavigateToAlertas = { navController.navigate(Screen.Alertas.route) },
                 onNavigateToLideranca = { navController.navigate(Screen.Lideranca.route) }
             )
-
         }
 
+        // --- Liderança ---
         composable(Screen.Lideranca.route) {
             LiderancaScreen(
                 onNavigateToCheckIn = { navController.navigate(Screen.CheckIn.route) },
                 onNavigateToComunicacao = { navController.navigate(Screen.Comunicacao.route) },
                 onNavigateToCarga = { navController.navigate(Screen.Carga.route) },
                 onNavigateToAlertas = { navController.navigate(Screen.Alertas.route) },
-                onNavigateToLideranca = { navController.navigate(Screen.Lideranca.route) },
-                onNavigateToRelacionamentos = { navController.navigate(Screen.Relacionamentos.route) },)
-
+                onNavigateToRelacionamentos = { navController.navigate(Screen.Relacionamentos.route) },
+                onNavigateToLideranca = { navController.navigate(Screen.Lideranca.route) }
+            )
         }
 
-
     }
+
 }

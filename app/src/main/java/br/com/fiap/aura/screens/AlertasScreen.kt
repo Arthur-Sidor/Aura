@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import br.com.fiap.aura.Menu.SideMenu
-import br.com.fiap.aura.Viewmodel.AlertasViewModel
+import br.com.fiap.aura.viewmodel.AlertasViewModel
 import br.com.fiap.aura.Components.PerguntaRadio
 import kotlinx.coroutines.launch
 

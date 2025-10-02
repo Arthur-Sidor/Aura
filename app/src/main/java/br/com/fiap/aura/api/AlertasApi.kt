@@ -1,4 +1,4 @@
-package br.com.fiap.aura.ApiMock
+package br.com.fiap.aura.api
 
 import br.com.fiap.aura.model.AlertasModel
 import retrofit2.Response

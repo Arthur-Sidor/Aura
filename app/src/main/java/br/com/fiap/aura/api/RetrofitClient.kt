@@ -1,12 +1,11 @@
 package br.com.fiap.aura.api
 
-import br.com.fiap.aura.ApiMock.AlertasApi
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
 
-    private const val BASE_URL = "https:localhost:" // Falta colocar a porta que o pablo falou
+    private const val BASE_URL = "http://localhost:5127" // Falta colocar a porta que o pablo falou
 
     // Retrofit único para todas as APIs
     private val retrofit: Retrofit by lazy {

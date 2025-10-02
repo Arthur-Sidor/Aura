@@ -1,11 +1,11 @@
-package br.com.fiap.aura.Viewmodel
+package br.com.fiap.aura.viewmodel
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 
 import br.com.fiap.aura.model.AlertasModel
-import br.com.fiap.aura.Repository.AlertasRepository
+import br.com.fiap.aura.repository.AlertasRepository
 
 import kotlinx.coroutines.launch
 

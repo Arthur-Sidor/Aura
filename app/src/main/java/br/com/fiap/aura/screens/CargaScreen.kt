@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.sp
 import br.com.fiap.aura.Components.HistoricoCard
 import br.com.fiap.aura.Components.PerguntaRadio
 import br.com.fiap.aura.Menu.SideMenu
-import br.com.fiap.aura.Viewmodel.CargaViewModel
+import br.com.fiap.aura.viewmodel.CargaViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)

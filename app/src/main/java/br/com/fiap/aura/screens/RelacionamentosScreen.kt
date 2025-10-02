@@ -15,7 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.com.fiap.aura.Menu.SideMenu
-import br.com.fiap.aura.Viewmodel.RelacionamentosViewModel
+import br.com.fiap.aura.viewmodel.RelacionamentosViewModel
 import br.com.fiap.aura.model.RelacionamentosModel
 import br.com.fiap.aura.model.ResponseRelacionamentosModel
 import kotlinx.coroutines.launch

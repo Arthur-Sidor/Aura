@@ -1,9 +1,9 @@
-package br.com.fiap.aura.Viewmodel
+package br.com.fiap.aura.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import br.com.fiap.aura.model.CargaModel
-import br.com.fiap.aura.Repository.CargaRepository
+import br.com.fiap.aura.repository.CargaRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch

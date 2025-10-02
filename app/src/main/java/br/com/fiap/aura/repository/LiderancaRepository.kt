@@ -1,4 +1,4 @@
-package br.com.fiap.aura.Repository
+package br.com.fiap.aura.repository
 
 import br.com.fiap.aura.api.RetrofitClient
 import br.com.fiap.aura.model.LiderancaModel

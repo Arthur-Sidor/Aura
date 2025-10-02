@@ -22,7 +22,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.com.fiap.aura.Menu.SideMenu
-import br.com.fiap.aura.Viewmodel.CheckInViewModel
+import br.com.fiap.aura.viewmodel.CheckInViewModel
 
 
 import kotlinx.coroutines.launch

@@ -1,4 +1,4 @@
-package br.com.fiap.aura.Viewmodel
+package br.com.fiap.aura.viewmodel
 
 
 import br.com.fiap.aura.model.RelacionamentosModel

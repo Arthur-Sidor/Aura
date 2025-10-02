@@ -1,11 +1,11 @@
-package br.com.fiap.aura.Viewmodel
+package br.com.fiap.aura.viewmodel
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import br.com.fiap.aura.model.CheckInModel
-import br.com.fiap.aura.Repository.CheckInRepository
+import br.com.fiap.aura.repository.CheckInRepository
 
 import kotlinx.coroutines.launch
 

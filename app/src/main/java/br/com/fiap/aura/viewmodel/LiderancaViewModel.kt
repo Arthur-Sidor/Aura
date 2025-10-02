@@ -1,9 +1,9 @@
-package br.com.fiap.aura.Viewmodel
+package br.com.fiap.aura.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import br.com.fiap.aura.model.LiderancaModel
-import br.com.fiap.aura.Repository.LiderancaRepository
+import br.com.fiap.aura.repository.LiderancaRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
