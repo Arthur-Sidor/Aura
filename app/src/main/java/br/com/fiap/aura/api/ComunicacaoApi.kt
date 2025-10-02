@@ -8,11 +8,11 @@ import retrofit2.http.POST
 
 interface ComunicacaoApi {
 
-    @POST("comunicacao/enviar")
+    @POST("api/ResponseRelatorio")
     suspend fun enviarResposta(
         @Body avaliacao: LiderancaModel
     ): Response<Void>  // pode ser outro tipo, depende do retorno do backend
 
-    @GET("comunicacao/historico")
+    @GET("api/ResponseRelatorio")
     suspend fun getHistorico(): Response<List<LiderancaModel>>
 }

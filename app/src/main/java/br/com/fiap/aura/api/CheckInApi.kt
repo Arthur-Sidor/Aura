@@ -7,10 +7,10 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 
 interface CheckInApi {
-    @POST("api/checkin/enviar") // Substitua pela rota real da API do Pablo
+    @POST("{id}") // Substitua pela rota real da API do Pablo
     suspend fun enviarCheckin(@Body checkIn: CheckInModel): Response<Unit>
 
-    @GET("api/checkin/listar")
+    @GET("{id}")
     suspend fun listarCheckins(): Response<List<CheckInModel>>
 
 }

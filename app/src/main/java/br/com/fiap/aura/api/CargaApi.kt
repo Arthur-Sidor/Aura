@@ -9,10 +9,10 @@ import retrofit2.http.POST
 interface CargaApi {
 
     // Busca todas as respostas registradas (histórico)
-    @GET("respostas-carga")
+    @GET("{id}")
     suspend fun getHistorico(): Response<List<CargaModel>>
 
     // Envia uma nova resposta do formulário
-    @POST("responder")
+    @POST("{id}")
     suspend fun enviarResposta(@Body resposta: CargaModel): Response<CargaModel>
 }

@@ -8,9 +8,9 @@ import retrofit2.http.POST
 
 interface AlertasApi {
 
-    @POST("alertas")
+    @POST("{id}")
     suspend fun enviarAlertas(@Body respostas: List<AlertasModel>): Response<Unit>
 
-    @GET("alertas")
+    @GET("{id}")
     suspend fun listarAlertas(): Response<List<List<AlertasModel>>>
 }

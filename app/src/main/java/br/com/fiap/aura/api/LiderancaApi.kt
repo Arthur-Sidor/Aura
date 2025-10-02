@@ -10,10 +10,10 @@ import retrofit2.http.POST
 interface LiderancaApi {
 
     // Endpoint para enviar a avaliação de liderança
-    @POST("lideranca/responder")
+    @POST("api/ResponseRelatorio")
     suspend fun enviarResposta(@Body avaliacao: LiderancaModel): Response<Void>
 
     // Endpoint para buscar histórico de avaliações
-    @GET("lideranca/historico")
+    @GET("api/ResponseRelatorio")
     suspend fun getHistorico(): Response<List<LiderancaModel>>
 }
