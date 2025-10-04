@@ -1,23 +1,21 @@
 package br.com.fiap.aura
 
-import br.com.fiap.aura.screens.BemEstarScreen
-
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+
+import androidx.compose.ui.graphics.Color
+import br.com.fiap.aura.screens.*
 import br.com.fiap.aura.ui.theme.AuraTheme
 
-class BemEstarTESTE : ComponentActivity() {
+class RelacionamentoTESTE: ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            AuraTheme {
-                Surface(
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    BemEstarScreen()
+            AuraTheme { // <- use o nome real do seu tema aqui
+                Surface(color = Color(0xFFF5F5F5)) {
+                    RelacionamentoScreen()
                 }
             }
         }
